@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>İslam'ın Otobiyografisi</title>
+<meta name="description" content="İslam (immodex): builder, ImmoTech'in kurucusu, VANTRA'nın yapımcısı. Kişisel dosya.">
+<meta name="theme-color" content="#04070a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="İslam · immodex">
+<meta property="og:description" content="Builder. ImmoTech'in kurucusu, VANTRA'nın yapımcısı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Düzen: ImmoTech personel dosyası. CRT ekran + HUD panelleri; hero'da holografik üçgen reaktör, altında dosya bölümleri. Tek tema: gece. Çok dilli (TR/EN/AR/DE/ES/FR/RU), Arapça için sağdan sola. */
+:root {
+  color-scheme: dark;
+  --void: #04070a;
+  --panel: #07111a;
+  --panel-2: #0a1823;
+  --line: rgba(60, 230, 255, .18);
+  --cyan: #3ce8ff;
+  --cyan-dim: #1a7f92;
+  --amber: #ffb43c;
+  --red: #ff3b55;
+  --green: #4dffa6;
+  --text: #d9f6ff;
+  --muted: #6f97a6;
+
+  --f-display: "Chakra Petch", "IBM Plex Sans Arabic", "IBM Plex Sans", "Arial Narrow", sans-serif;
+  --f-body: "IBM Plex Sans", "IBM Plex Sans Arabic", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", "IBM Plex Sans Arabic", ui-monospace, Menlo, monospace;
+
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--void); color: var(--text); font-family: var(--f-body); font-size: 16px; line-height: 1.55; overflow-x: hidden;
+  background-image:
+    linear-gradient(rgba(60, 232, 255, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 232, 255, .035) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--void);
+}
+/* CRT: tarama çizgileri + kenar kararması + kayan parlak bant */
+.crt { position: fixed; inset: 0; pointer-events: none; z-index: 80; }
+.crt::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, .22) 3px, rgba(0, 0, 0, 0) 4px);
+}
+.crt::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 22vh;
+  background: linear-gradient(180deg, rgba(60, 232, 255, 0), rgba(60, 232, 255, .035), rgba(60, 232, 255, 0));
+  animation: roll 7s linear infinite;
+}
+@keyframes roll { from { transform: translateY(-25vh); } to { transform: translateY(110vh); } }
+.vignette { position: fixed; inset: 0; pointer-events: none; z-index: 79; background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .65) 100%); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+.wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.mono { font-family: var(--f-mono); }
+.label { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+
+/* ───────── üst HUD şeridi ───────── */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: rgba(4, 7, 10, .88); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; gap: 10px 22px; align-items: center; justify-content: space-between; padding-block: 9px; flex-wrap: wrap; }
+.bar .brand { font-family: var(--f-display); font-weight: 700; letter-spacing: .14em; font-size: .85rem; color: var(--cyan); }
+.bar .stat { display: flex; gap: 10px 18px; flex-wrap: wrap; align-items: center; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); margin-inline-end: 7px; vertical-align: 1px; animation: pulse 1.6s steps(2) infinite; }
+@keyframes pulse { 50% { transform: scale(.45); } }
+.langpick { display: inline-flex; align-items: center; gap: 8px; }
+.langpick select {
+  font-family: var(--f-mono); font-size: .74rem; letter-spacing: .04em; color: var(--cyan); background: rgba(60, 232, 255, .06);
+  border: 1px solid var(--cyan-dim); border-radius: 0; padding: 4px 8px; cursor: pointer;
+}
+.langpick select:hover { background: rgba(60, 232, 255, .14); }
+.langpick option { background: #061019; color: var(--text); }
+
+/* ───────── HUD paneli ───────── */
+.panel {
+  position: relative; background: linear-gradient(180deg, rgba(10, 24, 35, .92), rgba(7, 17, 26, .92));
+  border: 1px solid var(--line);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+.panel::before, .panel::after { /* köşe parantezleri */
+  content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--cyan); border-style: solid; pointer-events: none;
+}
+.panel::before { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+.panel::after { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+
+/* ───────── hero ───────── */
+.hero .wrap { display: grid; gap: 24px; padding-block: 28px 20px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .hero .wrap { grid-template-columns: 1.05fr .95fr; align-items: stretch; } }
+.boot { font-family: var(--f-mono); font-size: .76rem; color: var(--muted); margin: 0 0 14px; min-height: 7.5em; white-space: pre-wrap; }
+.boot .ok { color: var(--green); } .boot .warn { color: var(--amber); }
+.name {
+  position: relative; font-family: var(--f-display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(4.6rem, 17vw, 10.5rem); line-height: .86; letter-spacing: .01em; margin: 0; padding-top: .14em;
+  color: var(--text); text-shadow: -.02em 0 rgba(255, 59, 85, .65), .02em 0 rgba(60, 232, 255, .65), 0 0 .25em rgba(60, 232, 255, .35);
+}
+.name::before, .name::after { content: attr(data-t); position: absolute; left: 0; top: 0; padding-top: .14em; width: 100%; pointer-events: none; }
+.name::before { color: var(--cyan); clip-path: inset(0 0 100% 0); }
+.name::after { color: var(--red); clip-path: inset(0 0 100% 0); }
+.name.glitch::before { animation: g1 .38s steps(3) 1; }
+.name.glitch::after { animation: g2 .38s steps(3) 1; }
+@keyframes g1 { 0% { clip-path: inset(12% 0 70% 0); transform: translateX(-.06em); } 50% { clip-path: inset(55% 0 20% 0); transform: translateX(.08em); } 100% { clip-path: inset(80% 0 4% 0); transform: translateX(-.03em); } }
+@keyframes g2 { 0% { clip-path: inset(60% 0 22% 0); transform: translateX(.07em); } 50% { clip-path: inset(8% 0 76% 0); transform: translateX(-.06em); } 100% { clip-path: inset(36% 0 48% 0); transform: translateX(.04em); } }
+.codename { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; margin-top: 10px; }
+.codename b { font-family: var(--f-mono); color: var(--cyan); font-size: 1.05rem; letter-spacing: .06em; }
+.role { font-family: var(--f-display); font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 500; margin: 14px 0 0; min-height: 1.4em; }
+.role b { color: var(--cyan); font-weight: 600; }
+.caret { display: inline-block; width: .5em; height: 1em; background: var(--cyan); vertical-align: -.12em; margin-inline-start: .1em; box-shadow: 0 0 8px var(--cyan); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { transform: scaleY(0); } }
+.stats { display: grid; gap: 10px; margin-top: 22px; max-width: 520px; font-family: var(--f-mono); font-size: .76rem; font-variant-numeric: tabular-nums; }
+.stat-row { display: grid; grid-template-columns: 8.5em 1fr 6.5em; gap: 12px; align-items: center; }
+.stat-row span:last-child { text-align: end; color: var(--text); }
+.meter { height: 8px; background: rgba(60, 232, 255, .08); border: 1px solid var(--line); position: relative; overflow: hidden; }
+.meter i { position: absolute; inset: 0; transform-origin: left; background: repeating-linear-gradient(90deg, var(--c, var(--cyan)) 0 6px, transparent 6px 8px); box-shadow: 0 0 10px var(--c, var(--cyan)); transform: scaleX(var(--v)); transition: transform 1.4s var(--ease-out); }
+[dir="rtl"] .meter i { transform-origin: right; }
+.js .meter i { transform: scaleX(0); }
+.js .stats.on .meter i { transform: scaleX(var(--v)); }
+.meter.over i { animation: over 1.2s steps(2) infinite; }
+@keyframes over { 50% { transform: scaleX(1) translateX(4px); } }
+.quick { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.qbtn {
+  font-family: var(--f-mono); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+  padding: 10px 14px; border: 1px solid var(--cyan-dim); color: var(--cyan); background: rgba(60, 232, 255, .05);
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+  transition: transform .35s var(--ease-spring), background .2s, color .2s;
+}
+.qbtn:hover, .qbtn:focus-visible { background: var(--cyan); color: var(--void); transform: translateY(-3px); }
+
+.holo { min-height: 380px; display: flex; flex-direction: column; }
+.holo-head { display: flex; justify-content: space-between; gap: 10px; padding: 14px 18px 0 26px; flex-wrap: wrap; }
+.holo-stage { position: relative; flex: 1; min-height: 340px; cursor: grab; touch-action: pan-y; }
+.holo-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.holo-foot { display: flex; justify-content: space-between; gap: 10px; padding: 0 26px 16px 18px; flex-wrap: wrap; }
+.holo-stage .fallback { position: absolute; left: 50%; top: 50%; width: 160px; height: 140px; margin: -70px 0 0 -80px; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: radial-gradient(circle at 50% 65%, #fff, var(--cyan) 30%, rgba(60, 232, 255, .1) 70%); }
+.reticle { position: absolute; inset: 18% 22%; border: 1px dashed rgba(60, 232, 255, .18); border-radius: 50%; pointer-events: none; animation: spin 30s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.scanline { position: absolute; left: 6%; right: 6%; height: 2px; top: 20%; background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 12px var(--cyan); pointer-events: none; animation: scan 3.6s ease-in-out infinite alternate; }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(220px); } }
+
+/* ───────── bölüm başlıkları ───────── */
+section.sec { padding-block: 70px 10px; }
+.sec-head { display: grid; gap: 6px; margin-bottom: 26px; }
+.sec-head .path { font-family: var(--f-mono); font-size: .76rem; color: var(--cyan-dim); }
+.sec-head h2 { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; font-size: clamp(2rem, 5.5vw, 3.4rem); line-height: 1; margin: 0; letter-spacing: .02em; text-wrap: balance; }
+.sec-head h2 em { font-style: normal; color: var(--cyan); text-shadow: 0 0 18px rgba(60, 232, 255, .5); }
+.sec-head p { margin: 4px 0 0; color: #a8c8d4; max-width: 60ch; }
+
+/* kayarak giriş (fade yok) */
+.js .slide { transform: translateY(46px) scale(.98); transition: transform .9s var(--ease-out); }
+.js .slide.in { transform: none; }
+
+/* ───────── kimlik ───────── */
+.dossier { display: grid; grid-template-columns: 1fr; gap: 0; padding: 26px; }
+@media (min-width: 820px) { .dossier { grid-template-columns: 240px 1fr; gap: 30px; } }
+.idcard { display: grid; gap: 14px; align-content: start; }
+.photo {
+  aspect-ratio: 1; max-width: 240px; width: 100%; position: relative; overflow: hidden; border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 38%, rgba(60, 232, 255, .25), rgba(60, 232, 255, 0) 60%), #061019;
+  display: grid; place-items: center;
+}
+.photo canvas { width: 100%; height: 100%; display: block; }
+.photo .tag { position: absolute; left: 8px; bottom: 8px; font-family: var(--f-mono); font-size: .62rem; letter-spacing: .14em; color: var(--amber); background: rgba(0, 0, 0, .6); padding: 3px 6px; }
+.clear { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .14em; color: var(--void); background: var(--amber); padding: 6px 8px; text-align: center; font-weight: 700; max-width: 240px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--line); margin-top: 20px; }
+@media (min-width: 820px) { .fields { margin-top: 0; } }
+.f { padding: 12px 0 12px; border-bottom: 1px solid var(--line); display: grid; gap: 2px; padding-inline-end: 16px; min-width: 0; }
+.f .label { font-size: .64rem; }
+.f b { font-family: var(--f-display); font-size: 1.12rem; font-weight: 600; line-height: 1.3; }
+.f b small { display: block; font-family: var(--f-body); font-size: .82rem; font-weight: 400; color: #a8c8d4; }
+.f.wide { grid-column: 1 / -1; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.chips span { font-family: var(--f-mono); font-size: .74rem; padding: 3px 8px; border: 1px solid var(--cyan-dim); color: var(--cyan); }
+.quote { margin: 22px 0 0; font-family: var(--f-display); font-size: clamp(1.25rem, 2.6vw, 1.6rem); font-weight: 500; line-height: 1.3; color: var(--text); grid-column: 1 / -1; border-inline-start: 3px solid var(--cyan); padding-inline-start: 16px; }
+.quote b { color: var(--cyan); }
+
+/* ───────── kendi ağzından ───────── */
+.voice { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 860px) { .voice { grid-template-columns: repeat(2, 1fr); } .voice .entry:first-child { grid-column: 1 / -1; } }
+.entry { padding: 22px 26px 24px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.entry .n { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .16em; color: var(--amber); }
+.entry h3 { font-family: var(--f-display); font-size: 1.55rem; font-weight: 700; line-height: 1.1; margin: 0; }
+.entry p { margin: 0; color: #b5d2dc; max-width: 70ch; }
+.voice .entry:first-child p { font-size: 1.12rem; color: var(--text); }
+
+/* ───────── döngü ───────── */
+.loop { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 12px; counter-reset: s; padding: 0; margin: 0; list-style: none; }
+.step {
+  counter-increment: s; position: relative; padding: 14px 14px 16px; min-height: 104px; border: 1px solid var(--line);
+  background: rgba(7, 17, 26, .9); transition: transform .45s var(--ease-spring), border-color .2s, box-shadow .2s, background .2s;
+}
+.step::before { content: counter(s, decimal-leading-zero); font-family: var(--f-mono); font-size: .7rem; color: var(--muted); display: block; margin-bottom: 8px; }
+.step b { font-family: var(--f-display); font-size: 1.12rem; font-weight: 600; line-height: 1.2; display: block; }
+.step small { display: block; color: var(--muted); font-size: .8rem; margin-top: 4px; }
+.step.on { border-color: var(--cyan); background: rgba(60, 232, 255, .1); box-shadow: 0 0 0 1px var(--cyan), 0 0 26px rgba(60, 232, 255, .25); transform: translateY(-4px); }
+.step.fail.on { border-color: var(--red); background: rgba(255, 59, 85, .12); box-shadow: 0 0 0 1px var(--red), 0 0 26px rgba(255, 59, 85, .3); animation: shake .4s linear; }
+.step.fail b { color: var(--red); }
+@keyframes shake { 20%, 60% { transform: translate(-4px, -4px); } 40%, 80% { transform: translate(4px, -4px); } }
+.loop-note { margin-top: 14px; font-family: var(--f-mono); font-size: .78rem; color: var(--muted); }
+.loop-note b { color: var(--amber); }
+
+/* ───────── projeler ───────── */
+.projects { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .projects { grid-template-columns: 1.15fr 1fr; } }
+.proj { padding: 24px 26px 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.proj h3 { font-family: var(--f-display); font-weight: 700; font-size: 1.9rem; line-height: 1; margin: 0; letter-spacing: .02em; }
+.proj p { margin: 0; color: #b5d2dc; }
+.badge { justify-self: start; font-family: var(--f-mono); font-size: .66rem; letter-spacing: .16em; padding: 4px 8px; font-weight: 700; }
+.badge.live { background: var(--green); color: var(--void); }
+.badge.rd { background: var(--amber); color: var(--void); }
+.badge.cpt { border: 1px solid var(--cyan-dim); color: var(--cyan); }
+.coin-wrap { display: grid; grid-template-columns: 130px 1fr; gap: 20px; align-items: center; }
+@media (max-width: 480px) { .coin-wrap { grid-template-columns: 1fr; } }
+.coin {
+  width: 130px; height: 130px; border-radius: 50%; position: relative; cursor: pointer; border: 0; padding: 0;
+  background: radial-gradient(circle at 34% 28%, #fff4cc, #e1b25a 35%, #93661f 75%, #5b3d0f);
+  box-shadow: inset 0 0 0 6px #b98b3a, inset 0 0 0 8px #f5d995, inset 0 0 0 24px rgba(0, 0, 0, .06), 0 0 30px rgba(255, 180, 60, .25), 0 14px 22px rgba(0, 0, 0, .6);
+  font-family: var(--f-display); font-weight: 700; font-size: 64px; color: #a3762b; text-shadow: -1px -1px 0 #fff1c4, 2px 2px 2px #5a3c10;
+  animation: coin 6s ease-in-out infinite;
+}
+@keyframes coin { 0%, 100% { transform: rotateY(-18deg); } 50% { transform: rotateY(18deg); } }
+.coin.stamp { animation: stamp .7s var(--ease-out); }
+@keyframes stamp { 0% { transform: scale(1); } 15% { transform: scale(.82, .78); } 100% { transform: scale(1) rotateY(360deg); } }
+.coin-wrap .coin { perspective: 400px; }
+.list { display: grid; gap: 10px; margin: 6px 0 0; padding: 0; list-style: none; }
+.list li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--line); }
+.list li b { font-family: var(--f-display); font-size: 1.15rem; font-weight: 600; }
+.list li span { color: #a8c8d4; font-size: .92rem; }
+.list .badge { margin-top: 2px; }
+.cta { justify-self: start; margin-top: 8px; }
+
+/* ───────── hafıza bankası ───────── */
+.memory { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.mod { padding: 20px 22px 22px; display: grid; gap: 8px; align-content: start; transition: transform .45s var(--ease-spring); min-width: 0; }
+.mod:hover { transform: translateY(-5px); }
+.mod .label { color: var(--cyan-dim); }
+.mod h3 { font-family: var(--f-display); font-size: 1.45rem; font-weight: 700; line-height: 1.05; margin: 0; text-transform: uppercase; }
+.mod p { margin: 0; color: #b5d2dc; font-size: .94rem; }
+.mod p b { color: var(--text); font-weight: 600; }
+.mod .chips span { font-size: .7rem; }
+.mod.saber-mod { grid-template-columns: 1fr auto; column-gap: 14px; }
+.mod.saber-mod > *:not(.saber) { grid-column: 1; }
+.saber { grid-column: 2; grid-row: 1 / span 4; width: 40px; height: 150px; position: relative; border: 0; background: none; padding: 0; cursor: pointer; align-self: center; }
+.blade { position: absolute; left: 50%; bottom: 44px; width: 7px; height: 104px; margin-left: -3.5px; border-radius: 4px 4px 2px 2px; background: #f4fbff; box-shadow: 0 0 3px 1px #fff, 0 0 10px 3px var(--cyan), 0 0 26px 8px rgba(60, 200, 255, .5); transform-origin: bottom; transform: scaleY(0); transition: transform .3s cubic-bezier(.5, 0, .2, 1.2); }
+.saber.on .blade { transform: scaleY(1); }
+.hilt { position: absolute; left: 50%; bottom: 0; width: 15px; height: 46px; margin-left: -7.5px; border-radius: 2px; background: repeating-linear-gradient(180deg, transparent 0 4px, rgba(0, 0, 0, .55) 4px 5px) 0 18px / 100% 18px no-repeat, linear-gradient(90deg, #555a61, #e6e8ec 30%, #9ca1a9 55%, #3c4046); }
+.hilt::before { content: ""; position: absolute; left: -3px; right: -3px; top: -4px; height: 8px; border-radius: 2px; background: linear-gradient(90deg, #2a2d32, #8c9199 35%, #1c1e22); }
+
+/* ───────── protokoller ───────── */
+.protocols { display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .protocols { grid-template-columns: 1.4fr 1fr; } }
+.term { padding: 22px 24px 24px; font-family: var(--f-mono); font-size: .9rem; line-height: 1.65; min-width: 0; }
+.term .cmd { color: var(--cyan); }
+.term .cmt { color: var(--muted); }
+.term p { margin: 0 0 12px; }
+.term p:last-child { margin: 0; }
+.term .k { color: var(--amber); }
+.redline { padding: 22px 24px 24px; border-color: rgba(255, 59, 85, .45); display: grid; gap: 10px; align-content: start; background: linear-gradient(180deg, rgba(40, 6, 14, .9), rgba(20, 4, 8, .9)); }
+.redline::before, .redline::after { border-color: var(--red); }
+.redline h3 { font-family: var(--f-display); font-size: 1.6rem; margin: 0; color: var(--red); text-transform: uppercase; letter-spacing: .04em; }
+.redline p { margin: 0; color: #f0c4cb; }
+.redline .tape { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .2em; font-weight: 700; color: #1a0306; padding: 6px 0; text-align: center; background: repeating-linear-gradient(-45deg, var(--red) 0 14px, #1a0306 14px 28px); background-size: 40px 40px; animation: tape 1.2s linear infinite; }
+.redline .tape span { background: var(--red); padding: 2px 10px; }
+@keyframes tape { to { background-position: 40px 0; } }
+
+/* ───────── bağlantılar ───────── */
+.ports { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.port {
+  display: grid; gap: 6px; padding: 22px 22px 20px; text-decoration: none; transition: transform .45s var(--ease-spring), background .2s;
+}
+.port:hover, .port:focus-visible { transform: translateY(-6px); background: linear-gradient(180deg, rgba(60, 232, 255, .16), rgba(7, 17, 26, .95)); }
+.port .top { display: flex; justify-content: space-between; gap: 8px; }
+.port h3 { font-family: var(--f-display); font-size: 1.9rem; font-weight: 700; margin: 4px 0 0; line-height: 1; }
+.port .handle { font-family: var(--f-mono); font-size: .84rem; color: var(--cyan); overflow-wrap: anywhere; }
+.port .go { margin-top: 10px; font-family: var(--f-mono); font-size: .72rem; letter-spacing: .14em; color: var(--muted); }
+.port:hover .go { color: var(--cyan); }
+.port .st { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .12em; }
+.st.up { color: var(--green); } .st.wait { color: var(--amber); }
+
+/* ───────── son ───────── */
+.end .wrap { padding-block: 80px 60px; display: grid; gap: 10px; }
+.end p { margin: 0; font-family: var(--f-mono); font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--cyan); }
+.end small { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .1em; color: var(--muted); }
+
+/* ───────── bildirim ───────── */
+.toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 90; width: min(440px, calc(100% - 32px));
+  transform: translate(-50%, 180%); transition: transform .55s var(--ease-spring);
+  background: #061019; border: 1px solid var(--cyan); color: var(--text); padding: 12px 14px; font-size: .9rem;
+  box-shadow: 0 0 30px rgba(60, 232, 255, .25); display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start;
+}
+.toast b { font-family: var(--f-mono); font-size: .72rem; color: var(--void); background: var(--cyan); padding: 2px 6px; letter-spacing: .1em; }
+.toast.show { transform: translate(-50%, 0); }
+
+/* ───────── Arapça (sağdan sola) ───────── */
+html[lang="ar"] body { font-family: "IBM Plex Sans Arabic", var(--f-body); }
+html[lang="ar"] *, html[lang="ar"] *::before, html[lang="ar"] *::after { letter-spacing: 0 !important; }
+html[lang="ar"] .label { font-size: .8rem; }
+html[lang="ar"] .name, html[lang="ar"] .name::before, html[lang="ar"] .name::after { line-height: 1.2; padding-top: 0; }
+[dir="rtl"] .port .handle { direction: ltr; text-align: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .slide { transform: none; }
+  .js .meter i { transform: scaleX(var(--v)); }
+}
+</style>
+</head>
+<body>
+
+<div class="crt" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="bar">
+  <div class="wrap">
+    <span class="brand" data-i18n="bar.brand">IMMOTECH // PERSONEL DOSYASI</span>
+    <span class="stat label">
+      <span><i class="dot"></i><span data-i18n="bar.secure">Bağlantı güvenli</span></span>
+      <span id="clock">--:--:--</span>
+      <label class="langpick"><span data-i18n="bar.lang">Dil</span>
+        <select id="lang">
+          <option value="tr">Türkçe</option>
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+          <option value="de">Deutsch</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="ru">Русский</option>
+          <option value="other" data-i18n="lang.other">Diğer diller…</option>
+        </select>
+      </label>
+    </span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <pre class="boot" id="boot" aria-hidden="true"></pre>
+      <h1 class="name" id="name" data-t="İslam" data-i18n="name">İslam</h1>
+      <div class="codename"><span class="label" data-i18n="cn.code">Kod adı</span><b>immodex</b><span class="label" data-i18n="cn.class">Sınıf</span><b data-i18n="cn.builder">Builder</b></div>
+      <p class="role">&gt; <b id="typed">teknolojiyi tüketmez, inşa eder</b><span class="caret"></span></p>
+      <div class="stats" id="stats">
+        <div class="stat-row"><span class="label" data-i18n="st.curiosity">Merak</span><div class="meter over" style="--v:1"><i></i></div><span data-i18n="st.curiosityV">∞ / taştı</span></div>
+        <div class="stat-row"><span class="label" data-i18n="st.ideas">Fikir üretimi</span><div class="meter" style="--v:.94"><i></i></div><span data-i18n="st.ideasV">dakikada 3</span></div>
+        <div class="stat-row"><span class="label" data-i18n="st.sleep">Uyku</span><div class="meter" style="--v:.12;--c:var(--red)"><i></i></div><span data-i18n="st.sleepV">%12</span></div>
+        <div class="stat-row"><span class="label" data-i18n="st.bil">Milyarderlik</span><div class="meter" style="--v:.02;--c:var(--amber)"><i></i></div><span id="bil">%0,000400</span></div>
+      </div>
+      <nav class="quick" lang="en" translate="no" aria-label="Hızlı bağlantılar" data-i18n-aria="nav.aria">
+        <a class="qbtn" href="#" data-link="instagram">Instagram</a>
+        <a class="qbtn" href="#" data-link="tiktok">TikTok</a>
+        <a class="qbtn" href="#" data-link="github">GitHub</a>
+        <a class="qbtn" href="#" data-link="vantra">VANTRA</a>
+      </nav>
+    </div>
+    <div class="panel holo">
+      <div class="holo-head"><span class="label" data-i18n="holo.title">Hologram · enerji çekirdeği</span><span class="label" id="holo-pct">Çıkış %100</span></div>
+      <div class="holo-stage" id="holo" aria-label="Dönen holografik üçgen reaktör. Sürükleyerek çevirebilirsin." data-i18n-aria="holo.aria">
+        <div class="fallback" id="holo-fallback"></div>
+        <div class="reticle"></div>
+        <div class="scanline"></div>
+      </div>
+      <div class="holo-foot"><span class="label" data-i18n="holo.why">Neden üçgen? Mark VI.</span><span class="label" data-i18n="holo.drag">Sürükle, çevir</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="sec" aria-labelledby="h-kimlik">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="id.path">/dosyalar/islam/kimlik.dat</span>
+      <h2 id="h-kimlik" data-i18n="id.h">Kimlik <em>kaydı</em></h2>
+    </div>
+    <div class="panel dossier slide">
+      <div class="idcard">
+        <div class="photo"><canvas id="face" aria-label="Taranan parmak izi" data-i18n-aria="id.photoAria"></canvas><span class="tag" data-i18n="id.tag">BİYOMETRİK · EŞLEŞTİ</span></div>
+        <div class="clear" data-i18n="id.clear">YETKİ SEVİYESİ: KURUCU</div>
+      </div>
+      <div>
+        <div class="fields">
+          <div class="f"><span class="label" data-i18n="id.name">Ad</span><b data-i18n="name">İslam</b></div>
+          <div class="f"><span class="label" data-i18n="id.user">Kullanıcı adı</span><b>immodex</b></div>
+          <div class="f"><span class="label" data-i18n="id.status">Durum</span><b><span data-i18n="id.statusV">Lise öğrencisi</span><small data-i18n="id.statusS">gündüz okul, gece kod</small></b></div>
+          <div class="f"><span class="label" data-i18n="id.langs">Diller</span><b><span data-i18n="id.langsV">Türkçe · English</span><small data-i18n="id.langsS">Arapça öğreniyor, Ürdün lehçesi</small></b></div>
+          <div class="f"><span class="label" data-i18n="id.company">Şirket</span><b>ImmoTech Industries<small data-i18n="id.companyS">kurucu, şimdilik tek çalışan</small></b></div>
+          <div class="f wide"><span class="label" data-i18n="id.stack">Teknoloji yığını</span>
+            <div class="chips"><span>Python</span><span>FastAPI</span><span>Flutter</span><span>Dart</span><span>Firebase</span><span>three.js</span><span>Claude Code</span><span data-i18n="id.aiDev">yapay zekâyla geliştirme</span></div>
+          </div>
+          <div class="f wide"><span class="label" data-i18n="id.gear">Ekipman</span>
+            <div class="chips"><span>MacBook</span><span>iPhone</span><span>Meta Quest</span><span>PS5</span><span>DualSense</span></div>
+          </div>
+          <div class="f wide"><span class="label" data-i18n="id.ideal">İdeal kimlik</span><b data-i18n="id.idealV">Mühendis + yapay zekâ geliştiricisi + girişimci + bilim insanı + moleküler biyolog + mucit</b></div>
+        </div>
+        <p class="quote" data-i18n="id.quote">Bir teknoloji gördüğünde aklına gelen ilk soru hep aynı: <b>"Bunu ben nasıl yaparım?"</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-ses">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="me.path">/dosyalar/islam/gunluk.log</span>
+      <h2 id="h-ses" data-i18n="me.h">Kendi <em>ağzından</em></h2>
+      <p data-i18n="me.p">Buraya kadar dosya konuştu. Şimdi sıra bende.</p>
+    </div>
+    <div class="voice">
+      <article class="panel entry slide"><span class="n">LOG 01</span><h3 data-i18n="e1h">Ben kimim?</h3><p data-i18n="e1p">Teknolojiyi izlemekle yetinmeyen bir lise öğrencisiyim. Yeni bir şey gördüğümde önce nasıl çalıştığını sorarım, sonra oturup kendim yapmaya çalışırım. Çoğu zaman ilk denemede olmaz. Sorun değil, döngü zaten bunun için var.</p></article>
+      <article class="panel entry slide"><span class="n">LOG 02</span><h3 data-i18n="e2h">Bir günüm</h3><p data-i18n="e2p">Gündüz okul, gece kod. En iyi fikirler hep gece yarısından sonra geliyor, uyku da bu yüzden listenin en sonunda. Kafam dolunca bir bölüm dizi, sonra yine ekrana dönüyorum.</p></article>
+      <article class="panel entry slide"><span class="n">LOG 03</span><h3 data-i18n="e3h">Neden yapıyorum?</h3><p data-i18n="e3p">Kod benim için amaç değil, araç. Asıl istediğim, insanların hayatına gerçekten dokunan şeyler yapmak: yaşlılara göz kulak olan bir ev, acil anda hayat kurtaran bir kıyafet. VANTRA bu yolun ilk adımı.</p></article>
+      <article class="panel entry slide"><span class="n">LOG 04</span><h3 data-i18n="e4h">Neye inanırım?</h3><p data-i18n="e4p">Saygıya ve dürüstlüğe. Neredeyse her şeyle şaka yaparım ama insanların değerleri, dini ve kimliği benim için kırmızı çizgi. Fikrimi sonuna kadar savunurum; haklıysan kabul ederim. Boş övgü yerine dürüst eleştiriyi tercih ederim.</p></article>
+      <article class="panel entry slide"><span class="n">LOG 05</span><h3 data-i18n="e5h">Nereye gidiyorum?</h3><p data-i18n="e5p">Önce VANTRA'yı büyütmek, sonra ImmoTech'i gerçek bir şirkete çevirmek. Mühendisliği, yapay zekâyı ve moleküler biyolojiyi aynı masada buluşturmak istiyorum. Ve her seferinde bir öncekinden daha büyüğünü yapmak.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-dongu">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="loop.path">/dosyalar/islam/calisma_dongusu.exe</span>
+      <h2 id="h-dongu" data-i18n="loop.h">Çalışma <em>döngüsü</em></h2>
+      <p data-i18n="loop.p">Kafasında her fikir bu yoldan geçer. Döngü şu an canlı çalışıyor, izleyebilirsin.</p>
+    </div>
+    <ol class="loop slide" id="loop">
+      <li class="step"><b data-i18n="s1">Hayal ettim</b><small data-i18n="s1s">genelde gece</small></li>
+      <li class="step"><b data-i18n="s2">Gerçekten yapılabilir mi?</b></li>
+      <li class="step"><b data-i18n="s3">Nasıl çalışıyor?</b><small data-i18n="s3s">"neden?" burada başlar</small></li>
+      <li class="step"><b data-i18n="s4">Ben yapabilir miyim?</b></li>
+      <li class="step"><b data-i18n="s5">Prototip yapalım</b></li>
+      <li class="step fail"><b data-i18n="s6">Çalışmadı 💀</b></li>
+      <li class="step"><b data-i18n="s7">Neden çalışmadı?</b></li>
+      <li class="step"><b data-i18n="s8">Düzelt</b></li>
+      <li class="step"><b data-i18n="s9">Çalıştı</b></li>
+      <li class="step"><b data-i18n="s10">Ürüne çevirelim</b></li>
+      <li class="step"><b data-i18n="s11">Şirket kuralım</b></li>
+      <li class="step"><b data-i18n="s12">Daha büyüğünü yapalım</b><small data-i18n="s12s">ve başa dön</small></li>
+    </ol>
+    <p class="loop-note"><span data-i18n="loop.laps">Tur sayısı:</span> <b id="laps">0</b> · <span data-i18n="loop.note">Kodlama burada amaç değil, araç.</span></p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-proje">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="proj.path">/dosyalar/immotech/projeler/</span>
+      <h2 id="h-proje" data-i18n="proj.h">Projeler ve <em>ImmoTech</em></h2>
+      <p data-i18n="proj.p">Biri canlı, gerisi yolda. Yazılımla başlıyor, giyilebilir teknolojiye, sağlığa ve robotiğe uzanıyor.</p>
+    </div>
+    <div class="projects">
+      <article class="panel proj slide">
+        <span class="badge live" data-i18n="proj.live">CANLI</span>
+        <div class="coin-wrap">
+          <button class="coin" id="coin" aria-label="Madalyayı bas" data-i18n-aria="proj.coinAria">V</button>
+          <div>
+            <h3>VANTRA</h3>
+            <p data-i18n="proj.vantra">Kendi uygulamam. İnsanlar madalya, rozet ve kabartma tasarlıyor, akışta paylaşıyor, sohbette birbirleriyle takas ediyor. Flutter ön yüz, Python arka uç, hepsi benim.</p>
+          </div>
+        </div>
+        <a class="qbtn cta" href="#" data-link="vantra" data-i18n="proj.open">VANTRA'yı aç</a>
+      </article>
+      <article class="panel proj slide">
+        <span class="badge cpt" data-i18n="proj.vision">VİZYON</span>
+        <h3>ImmoTech Industries</h3>
+        <p data-i18n="proj.immo">Uzun vadeli şirket. Amaç insanların hayatını gerçekten değiştiren ürünler.</p>
+        <ul class="list">
+          <li><span class="badge rd" data-i18n="proj.rd">AR-GE</span><div><b>Immo-Suit</b><br><span data-i18n="proj.suit">Kıyafeti bir bilgisayar gibi düşünmek: GPS, acil yardım, sensörler, biyometrik takip, yara müdahalesi.</span></div></li>
+          <li><span class="badge cpt" data-i18n="proj.concept">KONSEPT</span><div><b>Immo-Home</b><br><span data-i18n="proj.home">Yaşlılar için yapay zekâlı ev: ilaç takibi, sağlık verisi, ortam sensörleri, otomatik uyarı.</span></div></li>
+          <li><span class="badge cpt" data-i18n="proj.concept">KONSEPT</span><div><b>Immo-Car</b><br><span data-i18n="proj.car">Tekerlekli acil müdahale platformu.</span></div></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-hafiza">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="mem.path">/dosyalar/islam/hafiza_bankasi/</span>
+      <h2 id="h-hafiza" data-i18n="mem.h">Hafıza <em>bankası</em></h2>
+      <p data-i18n="mem.p">Kafayı neyin doldurduğu. Sıralama önem sırasına göre değil, açılma sırasına göre.</p>
+    </div>
+    <div class="memory">
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m1l">MOD-01 · Mühendislik</span>
+        <h3 lang="en" translate="no">Tony Stark</h3>
+        <p data-i18n="m1p">İlgisini çeken süper kahraman olması değil, <b>sorununu kendi teknolojisiyle çözmesi</b>. En sevdiği zırh Mark VI, üçgen reaktörü yüzünden. Tony'den aldığı: merak, mühendislik, üretmek. Almadığı: ego.</p>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m2l">MOD-02 · Sorumluluk</span>
+        <h3 lang="en" translate="no">Spider-Man</h3>
+        <p data-i18n="m2p">Tony ile Peter arasındaki usta-çırak ilişkisi. Tom Holland. Brand New Day ve Doomsday için geri sayım.</p>
+      </article>
+      <article class="panel mod saber-mod slide">
+        <span class="label" data-i18n="m3l">MOD-03 · Uyarı</span>
+        <h3 lang="en" translate="no">Anakin</h3>
+        <p data-i18n="m3p">Star Wars'ta en çok Anakin. Gücün insanı nereye götürebileceğini hatırlatan karakter. Bir de ışın kılıçları.</p>
+        <span class="label" data-i18n="m3touch">Kılıca dokun</span>
+        <button class="saber" id="saber" aria-pressed="false" aria-label="Işın kılıcını yak"><span class="blade"></span><span class="hilt"></span></button>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m4l">MOD-04 · Bilim kaosu</span>
+        <h3 lang="en" translate="no">Rick and Morty</h3>
+        <p data-i18n="m4p">Bilimin sınırı olmasaydı ne olurdu sorusunun cevabı. Portal tabancası, sonsuz paralel evren, absürt mizahla gerçek bilim aynı sahnede. Wubba lubba dub dub.</p>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m5l">MOD-05 · Kayıtlı diziler</span>
+        <h3 data-i18n="m5h">Gece arşivi</h3>
+        <div class="chips"><span>Teen Wolf</span><span>Stranger Things</span><span>Gravity Falls</span><span>The Big Bang Theory</span><span>Wednesday</span><span>Breaking Bad</span></div>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m6l">MOD-06 · Hikâye</span>
+        <h3 data-i18n="m6h">Oyunlar</h3>
+        <p data-i18n="m6p">Oynanış kadar hikâye, atmosfer ve sinematik anlatım da önemli.</p>
+        <div class="chips"><span>God of War</span><span>The Last of Us</span><span>Uncharted</span><span>Ghost of Tsushima</span></div>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m7l">MOD-07 · Bilinmeyen bilgi</span>
+        <h3 data-i18n="m7h">Uzay ve fizik</h3>
+        <p data-i18n="m7p">Zaman genişlemesi, kuantum, dördüncü boyut, TON 618, Interstellar, Artemis II. Bir de insan beyninin nasıl çalıştığı.</p>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="mbl">MOD-08 · Yaşam</span>
+        <h3 data-i18n="mbh">Biyoloji</h3>
+        <p data-i18n="mbp">Canlılar nasıl çalışıyor: hücreler, DNA, vücudun kendini nasıl onardığı. Immo-Suit ile Immo-Home'un sağlık tarafı da buradan besleniyor.</p>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="m8l">MOD-09 · Kurgu</span>
+        <h3 data-i18n="m8h">Edit kültürü</h3>
+        <p data-i18n="m8p">Karakter editleri, CapCut, ses ve kesme zamanlaması. İzlemekle kalmaz, editörle oturup sohbet eder.</p>
+      </article>
+      <article class="panel mod slide">
+        <span class="label" data-i18n="mfl">MOD-10 · Radar</span>
+        <h3 data-i18n="mfh">Radarında</h3>
+        <p data-i18n="mfp">Yakından takip ettiği isimler.</p>
+        <div class="chips" translate="no"><span>Moritz Zimmerman</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-protokol">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="pr.path">/dosyalar/islam/protokoller.txt</span>
+      <h2 id="h-protokol" data-i18n="pr.h">Çalışma <em>protokolleri</em></h2>
+      <p data-i18n="pr.p">Bu kişiyle iletişim kurmadan önce okuyun.</p>
+    </div>
+    <div class="protocols">
+      <div class="panel term slide">
+        <p data-i18n="pr.humor"><span class="cmd">$ islam --mizah</span><br>Absürt sıradanlaştırma. Çok havalı bir şeyi çok sıradan bir ayrıntıyla yan yana koyar: Darth Vader'ın markette sıra beklemesi gibi. Hafif sarkazm, biraz da kendiyle dalga.</p>
+        <p data-i18n="pr.serious"><span class="cmd">$ islam --ciddi</span><br>Ciddi soruya ciddi cevap ister. <span class="k">"neden?"</span> diyorsa sonucu değil mekanizmayı soruyordur. <span class="k">"emin misin?"</span> diyorsa cevabı test ediyordur.</p>
+        <p data-i18n="pr.angry"><span class="cmd">$ islam --sinirli</span><br>"Abartma" deme. Çözüm getir. Kendiliğinden düzelir.</p>
+        <p data-i18n="pr.argue"><span class="cmd">$ islam --itiraz</span><br>Fikrini sonuna kadar savunur. Haklı çıkarsan kabul eder.</p>
+        <p data-i18n="pr.impossible"><span class="cmd">$ islam --imkansiz</span><br>Önce sebebini sorar. Sebep yoksa oturur, prototipini yapar.</p>
+        <p class="cmt" data-i18n="pr.cmt"># İçi boş övgü, her fikre 10/10 ve uydurma bilgi bu sistemde çalışmaz.</p>
+      </div>
+      <div class="panel redline slide">
+        <div class="tape"><span data-i18n="pr.tape">KIRMIZI ÇİZGİ</span></div>
+        <h3 data-i18n="pr.h3">Erişim reddedildi</h3>
+        <p data-i18n="pr.p2">Neredeyse her şeyle şaka yapılır. İnsanların değerleri, dini ve kimliğiyle alay etmek bu sistemde yasak. Bu çizginin ötesine geçen bağlantı kesilir.</p>
+        <p class="mono" style="font-size:.78rem;color:#ff8a9a" data-i18n="pr.err">HATA 403 · değerlere_erişim: yasak</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-baglanti">
+  <div class="wrap">
+    <div class="sec-head slide">
+      <span class="path" data-i18n="po.path">/ag/baglanti_noktalari</span>
+      <h2 id="h-baglanti" data-i18n="po.h">Bağlantı <em>noktaları</em></h2>
+      <p data-i18n="po.p">Buradan sonrası benim dünyam. Hangisinden girersen.</p>
+    </div>
+    <div class="ports">
+      <a class="panel port slide" href="#" data-link="instagram"><div class="top"><span class="label">PORT 01</span><span class="st" data-st="instagram"></span></div><h3>Instagram</h3><span class="handle" data-handle="instagram"></span><span class="go" data-i18n="po.go">&gt; bağlan</span></a>
+      <a class="panel port slide" href="#" data-link="tiktok"><div class="top"><span class="label">PORT 02</span><span class="st" data-st="tiktok"></span></div><h3>TikTok</h3><span class="handle" data-handle="tiktok"></span><span class="go" data-i18n="po.go">&gt; bağlan</span></a>
+      <a class="panel port slide" href="#" data-link="github"><div class="top"><span class="label">PORT 03</span><span class="st" data-st="github"></span></div><h3>GitHub</h3><span class="handle" data-handle="github"></span><span class="go" data-i18n="po.go">&gt; bağlan</span></a>
+      <a class="panel port slide" href="#" data-link="vantra"><div class="top"><span class="label">PORT 04</span><span class="st" data-st="vantra"></span></div><h3>VANTRA</h3><span class="handle" data-handle="vantra"></span><span class="go" data-i18n="po.go">&gt; bağlan</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="wrap">
+    <p><span data-i18n="end.p">&gt; dosya güncelleniyor, devamı yazılıyor</span><span class="caret"></span></p>
+    <small>© İslam · ImmoTech Industries · <span id="now"></span></small>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"><b id="toast-sys">SİSTEM</b><span id="toast-text"></span></div>
+
+<script>
+/* ════════ Linkleri buradan değiştir. url boş kalırsa "beklemede" görünür. ════════ */
+const LINKS = {
+  instagram: { url: "https://www.instagram.com/immodex00/", handle: "@immodex00" },
+  tiktok:    { url: "https://www.tiktok.com/@immodex.ae",   handle: "@immodex.ae" },
+  github:    { url: "https://github.com/007checkmate007-dotcom", handle: "@007checkmate007-dotcom" },
+  vantra:    { url: "", handle: "" },
+};
+
+/* ════════ Çeviriler ════════
+   Sayfadaki Türkçe metinler otomatik olarak "tr" sözlüğüne alınır.
+   Yeni dil eklemek için: aşağıya yeni bir blok ekle (ör. "it": {...}) ve <select id="lang"> içine bir <option> koy.
+   Eksik anahtar önce İngilizceye, sonra Türkçeye düşer. */
+const T = {
+  tr: {
+    "title": "İslam'ın Otobiyografisi", "titleAway": "bağlantı koptu, geri dön",
+    "pct": "%{n}", "holo.out": "Çıkış",
+    "boot": [["> immotech_os v0.3 başlatılıyor…"], ["> biyometrik tarama ............ ", "EŞLEŞTİ", "ok"], ["> merak modülü ................ ", "TAŞMA", "warn"], ["> uyku modülü ................. ", "BULUNAMADI", "warn"], ["> personel dosyası açılıyor: İSLAM"]],
+    "typed": ["teknolojiyi tüketmez, inşa eder", "geleceğin CEO'su", "yarının milyarderi", "\"neden böyle?\" diye sorar", "gece 3'te kod yazar", "ImmoTech'in kurucusu"],
+    "toast.sys": "SİSTEM", "toast.port": "Bu port henüz açılmadı. Yakında.",
+    "toast.idle": "20 saniyedir hareket yok. Bu sürede iki fikir buldum, birini çöpe attım.",
+    "toast.other": "Diğer diller için tarayıcının Çevir özelliğini kullan (Chrome: sağ tık → Çevir, Safari: aA → Çevir). Sayfa buna hazır.",
+    "st.online": "● ÇEVRİMİÇİ", "st.wait": "● BEKLEMEDE", "handle.wait": "bağlantı bekleniyor",
+    "saber.ignite": "Işın kılıcını yak", "saber.off": "Işın kılıcını söndür",
+    "updated": "Son güncelleme: {d}", "console": "> kaynak koduna mı bakıyorsun? tam benlik.",
+  },
+
+  en: {
+    "title": "İslam's Autobiography", "titleAway": "connection lost, come back", "pct": "{n}%", "holo.out": "Output",
+    "bar.brand": "IMMOTECH // PERSONNEL FILE", "bar.secure": "Connection secure", "bar.lang": "Language", "lang.other": "Other languages…",
+    "cn.code": "Codename", "cn.class": "Class",
+    "st.curiosity": "Curiosity", "st.curiosityV": "∞ / overflow", "st.ideas": "Idea output", "st.ideasV": "3 per minute", "st.sleep": "Sleep", "st.sleepV": "12%", "st.bil": "Billionaire",
+    "nav.aria": "Quick links",
+    "holo.title": "Hologram · power core", "holo.aria": "Rotating holographic triangle reactor. Drag to spin it.", "holo.why": "Why a triangle? Mark VI.", "holo.drag": "Drag to rotate",
+    "id.path": "/files/islam/identity.dat", "id.h": "Identity <em>record</em>", "id.photoAria": "Scanned fingerprint", "id.tag": "BIOMETRIC · MATCHED", "id.clear": "CLEARANCE: FOUNDER",
+    "id.name": "Name", "id.user": "Username", "id.status": "Status", "id.statusV": "High school student", "id.statusS": "school by day, code by night",
+    "id.langs": "Languages", "id.langsV": "Turkish · English", "id.langsS": "learning Arabic, Jordanian dialect",
+    "id.company": "Company", "id.companyS": "founder, currently the only employee", "id.stack": "Tech stack", "id.aiDev": "AI-assisted development", "id.gear": "Gear",
+    "id.ideal": "Ideal identity", "id.idealV": "Engineer + AI developer + entrepreneur + scientist + molecular biologist + inventor",
+    "id.quote": `Whenever he sees a new technology, the first question is always the same: <b>"How would I build this?"</b>`,
+    "me.path": "/files/islam/journal.log", "me.h": "In my own <em>words</em>", "me.p": "So far the file did the talking. Now it's my turn.",
+    "e1h": "Who am I?", "e1p": "A high school student who isn't satisfied just watching technology. When I see something new, I first ask how it works, then I sit down and try to build it myself. It usually fails the first time. That's fine, that's what the loop is for.",
+    "e2h": "My day", "e2p": "School by day, code by night. The best ideas always show up after midnight, which is why sleep sits at the bottom of the list. When my head is full: one episode of a show, then back to the screen.",
+    "e3h": "Why do I build?", "e3p": "Code isn't the goal for me, it's the tool. What I really want is to make things that genuinely touch people's lives: a home that looks out for the elderly, clothing that saves a life in an emergency. VANTRA is the first step on that road.",
+    "e4h": "What do I believe in?", "e4p": "Respect and honesty. I joke about almost everything, but people's values, religion and identity are a red line for me. I defend my ideas to the end; if you're right, I'll admit it. I'd rather have honest criticism than empty praise.",
+    "e5h": "Where am I going?", "e5p": "First grow VANTRA, then turn ImmoTech into a real company. I want to bring engineering, AI and molecular biology to the same table. And every time, build something bigger than the last.",
+    "loop.path": "/files/islam/work_loop.exe", "loop.h": "Work <em>loop</em>", "loop.p": "Every idea in his head goes down this path. The loop is running live right now, watch it.",
+    "s1": "I imagined it", "s1s": "usually at night", "s2": "Is it actually possible?", "s3": "How does it work?", "s3s": `"why?" starts here`, "s4": "Can I build it?", "s5": "Let's prototype",
+    "s6": "It didn't work 💀", "s7": "Why didn't it work?", "s8": "Fix it", "s9": "It works", "s10": "Turn it into a product", "s11": "Start a company", "s12": "Build something bigger", "s12s": "and back to the start",
+    "loop.laps": "Laps:", "loop.note": "Code isn't the goal here, it's the tool.",
+    "proj.path": "/files/immotech/projects/", "proj.h": "Projects & <em>ImmoTech</em>", "proj.p": "One is live, the rest are on the way. It starts with software and reaches into wearables, health and robotics.",
+    "proj.live": "LIVE", "proj.coinAria": "Strike the medal",
+    "proj.vantra": "My own app. People design medals, badges and embossed pieces, share them in the feed and trade them with each other in chat. Flutter front end, Python back end, all mine.",
+    "proj.open": "Open VANTRA", "proj.vision": "VISION", "proj.immo": "The long-term company. The goal: products that genuinely change people's lives.",
+    "proj.rd": "R&amp;D", "proj.concept": "CONCEPT",
+    "proj.suit": "Thinking of clothing as a computer: GPS, emergency help, sensors, biometric tracking, wound response.",
+    "proj.home": "An AI home for the elderly: medication tracking, health data, room sensors, automatic alerts.", "proj.car": "A wheeled emergency response platform.",
+    "mem.path": "/files/islam/memory_bank/", "mem.h": "Memory <em>bank</em>", "mem.p": "What fills his head. Sorted by load order, not importance.",
+    "m1l": "MOD-01 · Engineering", "m1p": "What grabs him isn't the superhero part, it's that <b>he solves his own problem with his own tech</b>. Favorite suit: Mark VI, because of the triangle reactor. What he took from Tony: curiosity, engineering, building. What he left behind: the ego.",
+    "m2l": "MOD-02 · Responsibility", "m2p": "The mentor-apprentice bond between Tony and Peter. Tom Holland. Counting down to Brand New Day and Doomsday.",
+    "m3l": "MOD-03 · Warning", "m3p": "In Star Wars, Anakin above all. The character who reminds you where power can take a person. And lightsabers.", "m3touch": "Touch the saber",
+    "saber.ignite": "Ignite the lightsaber", "saber.off": "Turn off the lightsaber",
+    "m4l": "MOD-04 · Science chaos", "m4p": "What happens when science has no limits. Portal gun, infinite parallel universes, absurd humor and real science in the same scene. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · Saved shows", "m5h": "Night archive",
+    "m6l": "MOD-06 · Story", "m6h": "Games", "m6p": "Story, atmosphere and cinematic storytelling matter as much as gameplay.",
+    "m7l": "MOD-07 · The unknown", "m7h": "Space &amp; physics", "m7p": "Time dilation, quantum mechanics, the fourth dimension, TON 618, Interstellar, Artemis II. And how the human brain works.",
+    "mbl": "MOD-08 · Life", "mbh": "Biology", "mbp": "How living things work: cells, DNA, how the body repairs itself. The health side of Immo-Suit and Immo-Home grows out of this.",
+    "m8l": "MOD-09 · Editing", "m8h": "Edit culture", "m8p": "Character edits, CapCut, sound and cut timing. He doesn't just watch, he sits down and talks shop with editors.",
+    "mfl": "MOD-10 · Radar", "mfh": "On his radar", "mfp": "People he follows closely.",
+    "pr.path": "/files/islam/protocols.txt", "pr.h": "Operating <em>protocols</em>", "pr.p": "Read before contacting this person.",
+    "pr.humor": `<span class="cmd">$ islam --humor</span><br>Absurd mundanity. Puts something very cool next to something very ordinary: Darth Vader waiting in line at the grocery store. Light sarcasm, a bit of self-roasting.`,
+    "pr.serious": `<span class="cmd">$ islam --serious</span><br>A serious question wants a serious answer. If he says <span class="k">"why?"</span> he's asking about the mechanism, not the result. If he says <span class="k">"are you sure?"</span> he's testing your answer.`,
+    "pr.angry": `<span class="cmd">$ islam --annoyed</span><br>Don't say "calm down". Bring a solution. It fixes itself.`,
+    "pr.argue": `<span class="cmd">$ islam --debate</span><br>Defends his view all the way. If you're right, he'll admit it.`,
+    "pr.impossible": `<span class="cmd">$ islam --impossible</span><br>First he asks why. If there's no reason, he sits down and builds a prototype.`,
+    "pr.cmt": "# Empty praise, a 10/10 for every idea and made-up facts don't run on this system.",
+    "pr.tape": "RED LINE", "pr.h3": "Access denied", "pr.p2": "You can joke about almost anything. Mocking people's values, religion and identity is forbidden on this system. Cross this line and the connection drops.",
+    "pr.err": "ERROR 403 · access_to_values: forbidden",
+    "po.path": "/net/connection_ports", "po.h": "Connection <em>ports</em>", "po.p": "From here on it's my world. Pick your way in.", "po.go": "&gt; connect",
+    "end.p": "&gt; file updating, more being written",
+    "boot": [["> immotech_os v0.3 booting…"], ["> biometric scan .............. ", "MATCHED", "ok"], ["> curiosity module ............ ", "OVERFLOW", "warn"], ["> sleep module ................ ", "NOT FOUND", "warn"], ["> opening personnel file: İSLAM"]],
+    "typed": ["doesn't consume technology, builds it", "future CEO", "tomorrow's billionaire", `asks "why is it like this?"`, "writes code at 3 a.m.", "founder of ImmoTech"],
+    "toast.sys": "SYSTEM", "toast.port": "This port isn't open yet. Coming soon.", "toast.idle": "No movement for 20 seconds. I came up with two ideas in that time and binned one.",
+    "toast.other": "For other languages, use your browser's Translate option (Chrome: right-click → Translate, Safari: aA → Translate). The page is ready for it.",
+    "st.online": "● ONLINE", "st.wait": "● STANDBY", "handle.wait": "awaiting connection", "updated": "Last updated: {d}",
+    "console": "> reading the source code? classic me.",
+  },
+
+  ar: {
+    "title": "السيرة الذاتية لإسلام", "titleAway": "انقطع الاتصال، عُد", "pct": "{n}%", "holo.out": "الإنتاج", "name": "إسلام",
+    "bar.brand": "IMMOTECH // ملف الموظف", "bar.secure": "الاتصال آمن", "bar.lang": "اللغة", "lang.other": "لغات أخرى…",
+    "cn.code": "الاسم الرمزي", "cn.class": "الفئة", "cn.builder": "صانع",
+    "st.curiosity": "الفضول", "st.curiosityV": "∞ / فاض", "st.ideas": "إنتاج الأفكار", "st.ideasV": "3 في الدقيقة", "st.sleep": "النوم", "st.sleepV": "12%", "st.bil": "المليار",
+    "nav.aria": "روابط سريعة",
+    "holo.title": "هولوغرام · نواة الطاقة", "holo.aria": "مفاعل مثلث هولوغرافي يدور. اسحبه لتدويره.", "holo.why": "لماذا مثلث؟ Mark VI.", "holo.drag": "اسحب ودوّر",
+    "id.h": "سجل <em>الهوية</em>", "id.photoAria": "بصمة إصبع ممسوحة", "id.tag": "بيومتري · تطابق", "id.clear": "مستوى الصلاحية: مؤسس",
+    "id.name": "الاسم", "id.user": "اسم المستخدم", "id.status": "الحالة", "id.statusV": "طالب ثانوي", "id.statusS": "المدرسة في النهار، والبرمجة في الليل",
+    "id.langs": "اللغات", "id.langsV": "التركية · الإنجليزية", "id.langsS": "يتعلم العربية باللهجة الأردنية",
+    "id.company": "الشركة", "id.companyS": "المؤسس، والموظف الوحيد حاليًا", "id.stack": "التقنيات", "id.aiDev": "التطوير بالذكاء الاصطناعي", "id.gear": "المعدات",
+    "id.ideal": "الهوية المثالية", "id.idealV": "مهندس + مطوّر ذكاء اصطناعي + رائد أعمال + عالِم + عالِم أحياء جزيئية + مخترع",
+    "id.quote": "عندما يرى أي تقنية، أول سؤال يخطر بباله هو نفسه دائمًا: <b>«كيف أصنع هذا بنفسي؟»</b>",
+    "me.h": "بكلماتي <em>أنا</em>", "me.p": "حتى الآن تكلّم الملف. الآن دوري.",
+    "e1h": "من أنا؟", "e1p": "طالب ثانوي لا يكتفي بمشاهدة التقنية. عندما أرى شيئًا جديدًا أسأل أولًا كيف يعمل، ثم أجلس وأحاول صنعه بنفسي. غالبًا لا ينجح من المحاولة الأولى. لا بأس، فالدورة موجودة لهذا.",
+    "e2h": "يومي", "e2p": "المدرسة في النهار، والبرمجة في الليل. أفضل الأفكار تأتي دائمًا بعد منتصف الليل، ولهذا يأتي النوم في آخر القائمة. عندما يمتلئ رأسي: حلقة من مسلسل، ثم أعود إلى الشاشة.",
+    "e3h": "لماذا أصنع؟", "e3p": "البرمجة ليست هدفي، بل أداتي. ما أريده حقًا هو صنع أشياء تلمس حياة الناس فعلًا: منزل يعتني بكبار السن، وملابس تنقذ حياة في لحظة طوارئ. VANTRA هو الخطوة الأولى في هذا الطريق.",
+    "e4h": "بماذا أؤمن؟", "e4p": "بالاحترام والصدق. أمزح في كل شيء تقريبًا، لكن قيم الناس ودينهم وهويتهم خط أحمر عندي. أدافع عن رأيي حتى النهاية، وإذا كنت على حق أعترف بذلك. أفضّل النقد الصادق على المديح الفارغ.",
+    "e5h": "إلى أين أمضي؟", "e5p": "أولًا أن يكبر VANTRA، ثم أن تصبح ImmoTech شركة حقيقية. أريد أن أجمع الهندسة والذكاء الاصطناعي وعلم الأحياء الجزيئي على طاولة واحدة. وفي كل مرة، أن أصنع شيئًا أكبر من السابق.",
+    "loop.h": "دورة <em>العمل</em>", "loop.p": "كل فكرة في رأسه تمرّ من هذا الطريق. الدورة تعمل الآن مباشرة، يمكنك متابعتها.",
+    "s1": "تخيّلتها", "s1s": "غالبًا في الليل", "s2": "هل يمكن تنفيذها فعلًا؟", "s3": "كيف تعمل؟", "s3s": "هنا يبدأ «لماذا؟»", "s4": "هل أستطيع صنعها؟", "s5": "لنصنع نموذجًا أوليًا",
+    "s6": "لم تنجح 💀", "s7": "لماذا لم تنجح؟", "s8": "أصلحها", "s9": "نجحت", "s10": "لنحوّلها إلى منتج", "s11": "لنؤسس شركة", "s12": "لنصنع ما هو أكبر", "s12s": "ثم من البداية",
+    "loop.laps": "عدد الدورات:", "loop.note": "البرمجة هنا ليست الهدف، بل الأداة.",
+    "proj.h": "المشاريع و<em>ImmoTech</em>", "proj.p": "واحد يعمل الآن، والباقي في الطريق. يبدأ بالبرمجيات ويمتد إلى التقنيات القابلة للارتداء والصحة والروبوتات.",
+    "proj.live": "مباشر", "proj.coinAria": "اطبع الميدالية",
+    "proj.vantra": "تطبيقي الخاص. يصمم فيه الناس الميداليات والشارات والنقوش البارزة، ويشاركونها في الصفحة الرئيسية، ويتبادلونها في المحادثات. الواجهة بـ Flutter والخادم بـ Python، وكله من صنعي.",
+    "proj.open": "افتح VANTRA", "proj.vision": "رؤية", "proj.immo": "الشركة على المدى البعيد. الهدف: منتجات تغيّر حياة الناس فعلًا.",
+    "proj.rd": "بحث وتطوير", "proj.concept": "فكرة",
+    "proj.suit": "التفكير في الملابس كأنها حاسوب: GPS، مساعدة طارئة، حساسات، تتبّع بيومتري، علاج الجروح.",
+    "proj.home": "منزل بالذكاء الاصطناعي لكبار السن: متابعة الأدوية، بيانات صحية، حساسات للمكان، تنبيهات تلقائية.", "proj.car": "منصة استجابة طارئة على عجلات.",
+    "mem.h": "بنك <em>الذاكرة</em>", "mem.p": "ما يملأ رأسه. الترتيب حسب ترتيب الفتح، لا حسب الأهمية.",
+    "m1l": "MOD-01 · الهندسة", "m1p": "ما يجذبه ليس أنه بطل خارق، بل أنه <b>يحل مشكلته بتقنيته الخاصة</b>. بدلته المفضلة Mark VI بسبب المفاعل المثلث. أخذ من توني: الفضول، الهندسة، الصنع. ولم يأخذ: الغرور.",
+    "m2l": "MOD-02 · المسؤولية", "m2p": "علاقة المعلم والتلميذ بين توني وبيتر. توم هولاند. عدّ تنازلي لـ Brand New Day و Doomsday.",
+    "m3l": "MOD-03 · تحذير", "m3p": "في Star Wars، أناكين قبل الجميع. الشخصية التي تذكّرك إلى أين يمكن أن تأخذ القوةُ الإنسان. وسيوف الضوء طبعًا.", "m3touch": "المس السيف",
+    "saber.ignite": "أشعل سيف الضوء", "saber.off": "أطفئ سيف الضوء",
+    "m4l": "MOD-04 · فوضى العلم", "m4p": "ماذا يحدث عندما لا تكون للعلم حدود. مسدس البوابات، أكوان موازية لا نهائية، والكوميديا العبثية مع العلم الحقيقي في المشهد نفسه. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · مسلسلات محفوظة", "m5h": "أرشيف الليل",
+    "m6l": "MOD-06 · القصة", "m6h": "الألعاب", "m6p": "القصة والأجواء والسرد السينمائي مهمة بقدر طريقة اللعب.",
+    "m7l": "MOD-07 · المجهول", "m7h": "الفضاء والفيزياء", "m7p": "تمدد الزمن، الكم، البعد الرابع، TON 618، Interstellar، Artemis II. وأيضًا كيف يعمل الدماغ البشري.",
+    "mbl": "MOD-08 · الحياة", "mbh": "الأحياء", "mbp": "كيف تعمل الكائنات الحية: الخلايا، الحمض النووي، وكيف يصلح الجسم نفسه. الجانب الصحي في Immo-Suit و Immo-Home ينطلق من هنا.",
+    "m8l": "MOD-09 · المونتاج", "m8h": "ثقافة الإيدت", "m8p": "إيدتات الشخصيات، CapCut، توقيت الصوت والقطع. لا يكتفي بالمشاهدة، بل يجلس ويتحدث مع المحرّرين.",
+    "mfl": "MOD-10 · الرادار", "mfh": "على راداره", "mfp": "أسماء يتابعها عن قرب.",
+    "pr.h": "بروتوكولات <em>التشغيل</em>", "pr.p": "اقرأ قبل التواصل مع هذا الشخص.",
+    "pr.humor": `<span class="cmd">$ islam --humor</span><br>عبثية العادي. يضع شيئًا رائعًا جدًا بجانب تفصيل عادي جدًا: دارث فيدر واقف في طابور السوبرماركت. سخرية خفيفة، وقليل من الضحك على نفسه.`,
+    "pr.serious": `<span class="cmd">$ islam --serious</span><br>السؤال الجاد يستحق جوابًا جادًا. إذا قال <span class="k">«لماذا؟»</span> فهو يسأل عن الآلية لا عن النتيجة. وإذا قال <span class="k">«متأكد؟»</span> فهو يختبر الجواب.`,
+    "pr.angry": `<span class="cmd">$ islam --annoyed</span><br>لا تقل له «لا تبالغ». أحضر حلًا، وسيهدأ من نفسه.`,
+    "pr.argue": `<span class="cmd">$ islam --debate</span><br>يدافع عن رأيه حتى النهاية. وإذا كنت على حق، يعترف بذلك.`,
+    "pr.impossible": `<span class="cmd">$ islam --impossible</span><br>يسأل أولًا عن السبب. وإذا لم يكن هناك سبب، يجلس ويصنع نموذجًا أوليًا.`,
+    "pr.cmt": "# المديح الفارغ، و10/10 لكل فكرة، والمعلومات المختلقة لا تعمل على هذا النظام.",
+    "pr.tape": "خط أحمر", "pr.h3": "تم رفض الوصول", "pr.p2": "يمكن المزاح في كل شيء تقريبًا. السخرية من قيم الناس ودينهم وهويتهم ممنوعة على هذا النظام. من يتجاوز هذا الخط ينقطع اتصاله.",
+    "pr.err": "خطأ 403 · الوصول_إلى_القيم: ممنوع",
+    "po.h": "نقاط <em>الاتصال</em>", "po.p": "من هنا يبدأ عالمي. ادخل من أي باب تريد.", "po.go": "&gt; اتصل",
+    "end.p": "&gt; الملف قيد التحديث، والبقية تُكتب",
+    "boot": [["> تشغيل immotech_os v0.3…"], ["> مسح بيومتري .............. ", "تطابق", "ok"], ["> وحدة الفضول .............. ", "فيضان", "warn"], ["> وحدة النوم ............... ", "غير موجودة", "warn"], ["> فتح ملف الموظف: إسلام"]],
+    "typed": ["لا يستهلك التقنية، بل يصنعها", "الرئيس التنفيذي القادم", "ملياردير الغد", "يسأل «لماذا هكذا؟»", "يبرمج في الثالثة فجرًا", "مؤسس ImmoTech"],
+    "toast.sys": "النظام", "toast.port": "هذا المنفذ لم يُفتح بعد. قريبًا.", "toast.idle": "لا حركة منذ 20 ثانية. خلالها خطرت لي فكرتان، ورميت واحدة.",
+    "toast.other": "للغات أخرى استخدم خيار «ترجمة» في متصفحك (Chrome: زر الفأرة الأيمن ← ترجمة، Safari: aA ← ترجمة). الصفحة جاهزة لذلك.",
+    "st.online": "● متصل", "st.wait": "● قيد الانتظار", "handle.wait": "بانتظار الاتصال", "updated": "آخر تحديث: {d}",
+    "console": "> تقرأ الكود المصدري؟ هذا أنا تمامًا.",
+  },
+
+  de: {
+    "title": "İslams Autobiografie", "titleAway": "Verbindung verloren, komm zurück", "pct": "{n} %", "holo.out": "Leistung",
+    "bar.brand": "IMMOTECH // PERSONALAKTE", "bar.secure": "Verbindung sicher", "bar.lang": "Sprache", "lang.other": "Weitere Sprachen…",
+    "cn.code": "Codename", "cn.class": "Klasse",
+    "st.curiosity": "Neugier", "st.curiosityV": "∞ / übergelaufen", "st.ideas": "Ideen-Output", "st.ideasV": "3 pro Minute", "st.sleep": "Schlaf", "st.sleepV": "12 %", "st.bil": "Milliardär",
+    "nav.aria": "Schnellzugriff",
+    "holo.title": "Hologramm · Energiekern", "holo.aria": "Rotierender holografischer Dreiecksreaktor. Zum Drehen ziehen.", "holo.why": "Warum ein Dreieck? Mark VI.", "holo.drag": "Ziehen, drehen",
+    "id.h": "Identitäts<em>eintrag</em>", "id.photoAria": "Gescannter Fingerabdruck", "id.tag": "BIOMETRIE · TREFFER", "id.clear": "FREIGABESTUFE: GRÜNDER",
+    "id.name": "Name", "id.user": "Benutzername", "id.status": "Status", "id.statusV": "Schüler", "id.statusS": "tagsüber Schule, nachts Code",
+    "id.langs": "Sprachen", "id.langsV": "Türkisch · Englisch", "id.langsS": "lernt Arabisch, jordanischer Dialekt",
+    "id.company": "Firma", "id.companyS": "Gründer, aktuell einziger Mitarbeiter", "id.stack": "Tech-Stack", "id.aiDev": "Entwicklung mit KI", "id.gear": "Ausrüstung",
+    "id.ideal": "Ideale Identität", "id.idealV": "Ingenieur + KI-Entwickler + Unternehmer + Wissenschaftler + Molekularbiologe + Erfinder",
+    "id.quote": "Wenn er eine Technologie sieht, ist die erste Frage immer dieselbe: <b>„Wie baue ich das selbst?“</b>",
+    "me.h": "Mit meinen <em>Worten</em>", "me.p": "Bis hier hat die Akte gesprochen. Jetzt bin ich dran.",
+    "e1h": "Wer bin ich?", "e1p": "Ein Schüler, dem es nicht reicht, Technik nur anzuschauen. Wenn ich etwas Neues sehe, frage ich zuerst, wie es funktioniert, und dann versuche ich, es selbst zu bauen. Beim ersten Versuch klappt es meistens nicht. Kein Problem, dafür gibt es die Schleife.",
+    "e2h": "Mein Tag", "e2p": "Tagsüber Schule, nachts Code. Die besten Ideen kommen immer nach Mitternacht, deshalb steht Schlaf ganz unten auf der Liste. Wenn mein Kopf voll ist: eine Folge einer Serie, dann zurück an den Bildschirm.",
+    "e3h": "Warum baue ich?", "e3p": "Code ist für mich nicht das Ziel, sondern das Werkzeug. Was ich wirklich will: Dinge bauen, die das Leben von Menschen spürbar verändern. Ein Zuhause, das auf ältere Menschen achtet, Kleidung, die im Notfall Leben rettet. VANTRA ist der erste Schritt auf diesem Weg.",
+    "e4h": "Woran glaube ich?", "e4p": "An Respekt und Ehrlichkeit. Ich mache über fast alles Witze, aber die Werte, die Religion und die Identität von Menschen sind für mich eine rote Linie. Ich verteidige meine Ideen bis zum Ende; hast du recht, gebe ich es zu. Ehrliche Kritik ist mir lieber als leeres Lob.",
+    "e5h": "Wohin gehe ich?", "e5p": "Erst VANTRA wachsen lassen, dann aus ImmoTech eine echte Firma machen. Ich will Ingenieurwesen, KI und Molekularbiologie an einen Tisch bringen. Und jedes Mal etwas Größeres bauen als beim letzten Mal.",
+    "loop.h": "Arbeits<em>schleife</em>", "loop.p": "Jede Idee in seinem Kopf nimmt diesen Weg. Die Schleife läuft gerade live, schau zu.",
+    "s1": "Ausgedacht", "s1s": "meistens nachts", "s2": "Geht das wirklich?", "s3": "Wie funktioniert das?", "s3s": "hier beginnt das „Warum?“", "s4": "Kann ich das bauen?", "s5": "Prototyp bauen",
+    "s6": "Hat nicht geklappt 💀", "s7": "Warum nicht?", "s8": "Reparieren", "s9": "Läuft", "s10": "Ein Produkt draus machen", "s11": "Firma gründen", "s12": "Etwas Größeres bauen", "s12s": "und wieder von vorn",
+    "loop.laps": "Runden:", "loop.note": "Code ist hier nicht das Ziel, sondern das Werkzeug.",
+    "proj.h": "Projekte &amp; <em>ImmoTech</em>", "proj.p": "Eins ist live, der Rest ist unterwegs. Es beginnt mit Software und reicht bis zu Wearables, Gesundheit und Robotik.",
+    "proj.live": "LIVE", "proj.coinAria": "Medaille prägen",
+    "proj.vantra": "Meine eigene App. Leute entwerfen Medaillen, Abzeichen und Prägungen, teilen sie im Feed und tauschen sie im Chat. Flutter-Frontend, Python-Backend, alles von mir.",
+    "proj.open": "VANTRA öffnen", "proj.vision": "VISION", "proj.immo": "Die langfristige Firma. Ziel: Produkte, die das Leben von Menschen wirklich verändern.",
+    "proj.rd": "F&amp;E", "proj.concept": "KONZEPT",
+    "proj.suit": "Kleidung als Computer denken: GPS, Notfallhilfe, Sensoren, biometrisches Tracking, Wundversorgung.",
+    "proj.home": "Ein KI-Zuhause für ältere Menschen: Medikamentenplan, Gesundheitsdaten, Raumsensoren, automatische Warnungen.", "proj.car": "Eine fahrbare Notfall-Einsatzplattform.",
+    "mem.h": "Gedächtnis<em>bank</em>", "mem.p": "Was seinen Kopf füllt. Sortiert nach Ladereihenfolge, nicht nach Wichtigkeit.",
+    "m1l": "MOD-01 · Ingenieurwesen", "m1p": "Ihn reizt nicht der Superheld, sondern dass <b>er sein Problem mit seiner eigenen Technik löst</b>. Lieblingsanzug: Mark VI, wegen des Dreiecksreaktors. Von Tony übernommen: Neugier, Ingenieurskunst, Bauen. Nicht übernommen: das Ego.",
+    "m2l": "MOD-02 · Verantwortung", "m2p": "Die Mentor-Schüler-Beziehung zwischen Tony und Peter. Tom Holland. Countdown zu Brand New Day und Doomsday.",
+    "m3l": "MOD-03 · Warnung", "m3p": "Bei Star Wars vor allem Anakin. Die Figur, die daran erinnert, wohin Macht einen Menschen bringen kann. Und Lichtschwerter.", "m3touch": "Schwert berühren",
+    "saber.ignite": "Lichtschwert zünden", "saber.off": "Lichtschwert ausschalten",
+    "m4l": "MOD-04 · Wissenschaftschaos", "m4p": "Was passiert, wenn Wissenschaft keine Grenzen hat. Portalkanone, unendlich viele Paralleluniversen, absurder Humor und echte Wissenschaft in derselben Szene. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · Gespeicherte Serien", "m5h": "Nachtarchiv",
+    "m6l": "MOD-06 · Story", "m6h": "Spiele", "m6p": "Story, Atmosphäre und filmisches Erzählen zählen genauso viel wie das Gameplay.",
+    "m7l": "MOD-07 · Das Unbekannte", "m7h": "Weltraum &amp; Physik", "m7p": "Zeitdilatation, Quanten, die vierte Dimension, TON 618, Interstellar, Artemis II. Und wie das menschliche Gehirn funktioniert.",
+    "mbl": "MOD-08 · Leben", "mbh": "Biologie", "mbp": "Wie Lebewesen funktionieren: Zellen, DNA, wie der Körper sich selbst repariert. Die Gesundheitsseite von Immo-Suit und Immo-Home kommt genau daher.",
+    "m8l": "MOD-09 · Schnitt", "m8h": "Edit-Kultur", "m8p": "Charakter-Edits, CapCut, Sound- und Schnitt-Timing. Er schaut nicht nur zu, er setzt sich hin und fachsimpelt mit Editoren.",
+    "mfl": "MOD-10 · Radar", "mfh": "Auf seinem Radar", "mfp": "Leute, denen er genau folgt.",
+    "pr.h": "Betriebs<em>protokolle</em>", "pr.p": "Vor Kontaktaufnahme mit dieser Person lesen.",
+    "pr.humor": `<span class="cmd">$ islam --humor</span><br>Absurde Alltäglichkeit. Stellt etwas sehr Cooles neben etwas sehr Banales: Darth Vader in der Supermarktschlange. Leichter Sarkasmus, ein bisschen Selbstironie.`,
+    "pr.serious": `<span class="cmd">$ islam --ernst</span><br>Eine ernste Frage verdient eine ernste Antwort. Sagt er <span class="k">„warum?“</span>, fragt er nach dem Mechanismus, nicht nach dem Ergebnis. Sagt er <span class="k">„bist du sicher?“</span>, testet er die Antwort.`,
+    "pr.angry": `<span class="cmd">$ islam --genervt</span><br>Sag nicht „übertreib nicht“. Bring eine Lösung. Dann legt sich das von selbst.`,
+    "pr.argue": `<span class="cmd">$ islam --diskussion</span><br>Verteidigt seine Meinung bis zum Ende. Hast du recht, gibt er es zu.`,
+    "pr.impossible": `<span class="cmd">$ islam --unmoeglich</span><br>Fragt zuerst nach dem Grund. Gibt es keinen, setzt er sich hin und baut einen Prototyp.`,
+    "pr.cmt": "# Leeres Lob, 10/10 für jede Idee und erfundene Fakten laufen auf diesem System nicht.",
+    "pr.tape": "ROTE LINIE", "pr.h3": "Zugriff verweigert", "pr.p2": "Über fast alles darf man Witze machen. Sich über die Werte, die Religion und die Identität von Menschen lustig zu machen, ist auf diesem System verboten. Wer diese Linie überschreitet, wird getrennt.",
+    "pr.err": "FEHLER 403 · zugriff_auf_werte: verboten",
+    "po.h": "Verbindungs<em>ports</em>", "po.p": "Ab hier beginnt meine Welt. Such dir einen Eingang aus.", "po.go": "&gt; verbinden",
+    "end.p": "&gt; Akte wird aktualisiert, Fortsetzung folgt",
+    "boot": [["> immotech_os v0.3 startet…"], ["> Biometrie-Scan .............. ", "TREFFER", "ok"], ["> Neugier-Modul ............... ", "ÜBERLAUF", "warn"], ["> Schlaf-Modul ................ ", "NICHT GEFUNDEN", "warn"], ["> Personalakte wird geöffnet: İSLAM"]],
+    "typed": ["konsumiert Technik nicht, er baut sie", "der CEO von morgen", "der Milliardär von morgen", "fragt „warum ist das so?“", "schreibt um 3 Uhr nachts Code", "Gründer von ImmoTech"],
+    "toast.sys": "SYSTEM", "toast.port": "Dieser Port ist noch nicht offen. Bald.", "toast.idle": "Seit 20 Sekunden keine Bewegung. In der Zeit hatte ich zwei Ideen und habe eine verworfen.",
+    "toast.other": "Für weitere Sprachen nutze die Übersetzen-Funktion deines Browsers (Chrome: Rechtsklick → Übersetzen, Safari: aA → Übersetzen). Die Seite ist dafür vorbereitet.",
+    "st.online": "● ONLINE", "st.wait": "● WARTET", "handle.wait": "Verbindung ausstehend", "updated": "Zuletzt aktualisiert: {d}",
+    "console": "> du liest den Quellcode? Typisch ich.",
+  },
+
+  es: {
+    "title": "La autobiografía de İslam", "titleAway": "conexión perdida, vuelve", "pct": "{n} %", "holo.out": "Salida",
+    "bar.brand": "IMMOTECH // EXPEDIENTE DE PERSONAL", "bar.secure": "Conexión segura", "bar.lang": "Idioma", "lang.other": "Otros idiomas…",
+    "cn.code": "Nombre en clave", "cn.class": "Clase",
+    "st.curiosity": "Curiosidad", "st.curiosityV": "∞ / desbordada", "st.ideas": "Ideas", "st.ideasV": "3 por minuto", "st.sleep": "Sueño", "st.sleepV": "12 %", "st.bil": "Multimillonario",
+    "nav.aria": "Enlaces rápidos",
+    "holo.title": "Holograma · núcleo de energía", "holo.aria": "Reactor triangular holográfico girando. Arrástralo para rotarlo.", "holo.why": "¿Por qué un triángulo? Mark VI.", "holo.drag": "Arrastra y gira",
+    "id.h": "Registro de <em>identidad</em>", "id.photoAria": "Huella dactilar escaneada", "id.tag": "BIOMÉTRICO · COINCIDE", "id.clear": "NIVEL DE ACCESO: FUNDADOR",
+    "id.name": "Nombre", "id.user": "Usuario", "id.status": "Estado", "id.statusV": "Estudiante de bachillerato", "id.statusS": "clase de día, código de noche",
+    "id.langs": "Idiomas", "id.langsV": "Turco · Inglés", "id.langsS": "aprendiendo árabe, dialecto jordano",
+    "id.company": "Empresa", "id.companyS": "fundador, por ahora el único empleado", "id.stack": "Stack tecnológico", "id.aiDev": "desarrollo con IA", "id.gear": "Equipo",
+    "id.ideal": "Identidad ideal", "id.idealV": "Ingeniero + desarrollador de IA + emprendedor + científico + biólogo molecular + inventor",
+    "id.quote": "Cuando ve una tecnología, la primera pregunta siempre es la misma: <b>«¿Cómo lo hago yo?»</b>",
+    "me.h": "En mis propias <em>palabras</em>", "me.p": "Hasta aquí habló el expediente. Ahora me toca a mí.",
+    "e1h": "¿Quién soy?", "e1p": "Un estudiante de bachillerato al que no le basta con mirar la tecnología. Cuando veo algo nuevo, primero pregunto cómo funciona y luego me siento a intentar hacerlo yo mismo. Casi nunca sale a la primera. No pasa nada, para eso está el ciclo.",
+    "e2h": "Mi día", "e2p": "Clase de día, código de noche. Las mejores ideas siempre llegan pasada la medianoche, por eso el sueño está al final de la lista. Cuando tengo la cabeza llena: un capítulo de una serie y vuelta a la pantalla.",
+    "e3h": "¿Por qué construyo?", "e3p": "Para mí programar no es el objetivo, es la herramienta. Lo que de verdad quiero es crear cosas que toquen la vida de la gente: una casa que cuide de los mayores, ropa que salve una vida en una emergencia. VANTRA es el primer paso de ese camino.",
+    "e4h": "¿En qué creo?", "e4p": "En el respeto y la honestidad. Bromeo con casi todo, pero los valores, la religión y la identidad de las personas son una línea roja para mí. Defiendo mis ideas hasta el final; si tienes razón, lo admito. Prefiero una crítica honesta a un elogio vacío.",
+    "e5h": "¿Hacia dónde voy?", "e5p": "Primero hacer crecer VANTRA, luego convertir ImmoTech en una empresa de verdad. Quiero sentar a la ingeniería, la IA y la biología molecular en la misma mesa. Y cada vez, hacer algo más grande que lo anterior.",
+    "loop.h": "Ciclo de <em>trabajo</em>", "loop.p": "Cada idea en su cabeza pasa por este camino. El ciclo está corriendo en vivo, puedes verlo.",
+    "s1": "Lo imaginé", "s1s": "normalmente de noche", "s2": "¿De verdad se puede hacer?", "s3": "¿Cómo funciona?", "s3s": "aquí empieza el «¿por qué?»", "s4": "¿Puedo hacerlo yo?", "s5": "Hagamos un prototipo",
+    "s6": "No funcionó 💀", "s7": "¿Por qué no funcionó?", "s8": "Arreglarlo", "s9": "Funcionó", "s10": "Convertirlo en producto", "s11": "Fundar una empresa", "s12": "Hacer algo más grande", "s12s": "y volver al inicio",
+    "loop.laps": "Vueltas:", "loop.note": "Aquí programar no es el objetivo, es la herramienta.",
+    "proj.h": "Proyectos e <em>ImmoTech</em>", "proj.p": "Uno está en vivo, el resto en camino. Empieza con software y llega a la tecnología vestible, la salud y la robótica.",
+    "proj.live": "EN VIVO", "proj.coinAria": "Acuñar la medalla",
+    "proj.vantra": "Mi propia app. La gente diseña medallas, insignias y relieves, los comparte en el feed y los intercambia por chat. Front-end en Flutter, back-end en Python, todo mío.",
+    "proj.open": "Abrir VANTRA", "proj.vision": "VISIÓN", "proj.immo": "La empresa a largo plazo. El objetivo: productos que de verdad cambien la vida de la gente.",
+    "proj.rd": "I+D", "proj.concept": "CONCEPTO",
+    "proj.suit": "Pensar la ropa como un ordenador: GPS, ayuda de emergencia, sensores, seguimiento biométrico, atención de heridas.",
+    "proj.home": "Una casa con IA para personas mayores: control de medicación, datos de salud, sensores ambientales, alertas automáticas.", "proj.car": "Una plataforma de respuesta a emergencias sobre ruedas.",
+    "mem.h": "Banco de <em>memoria</em>", "mem.p": "Lo que le llena la cabeza. Ordenado por orden de carga, no por importancia.",
+    "m1l": "MOD-01 · Ingeniería", "m1p": "Lo que le atrae no es que sea un superhéroe, sino que <b>resuelve su problema con su propia tecnología</b>. Su armadura favorita es la Mark VI, por el reactor triangular. Lo que tomó de Tony: curiosidad, ingeniería, crear. Lo que no: el ego.",
+    "m2l": "MOD-02 · Responsabilidad", "m2p": "La relación maestro-aprendiz entre Tony y Peter. Tom Holland. Cuenta atrás para Brand New Day y Doomsday.",
+    "m3l": "MOD-03 · Advertencia", "m3p": "En Star Wars, sobre todo Anakin. El personaje que recuerda hasta dónde puede llevar el poder a una persona. Y los sables de luz.", "m3touch": "Toca el sable",
+    "saber.ignite": "Encender el sable de luz", "saber.off": "Apagar el sable de luz",
+    "m4l": "MOD-04 · Caos científico", "m4p": "Qué pasa cuando la ciencia no tiene límites. Pistola de portales, universos paralelos infinitos, humor absurdo y ciencia real en la misma escena. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · Series guardadas", "m5h": "Archivo nocturno",
+    "m6l": "MOD-06 · Historia", "m6h": "Videojuegos", "m6p": "La historia, la atmósfera y la narrativa cinematográfica importan tanto como la jugabilidad.",
+    "m7l": "MOD-07 · Lo desconocido", "m7h": "Espacio y física", "m7p": "Dilatación del tiempo, cuántica, la cuarta dimensión, TON 618, Interstellar, Artemis II. Y cómo funciona el cerebro humano.",
+    "mbl": "MOD-08 · Vida", "mbh": "Biología", "mbp": "Cómo funcionan los seres vivos: células, ADN, cómo se repara el cuerpo. La parte de salud de Immo-Suit e Immo-Home nace de aquí.",
+    "m8l": "MOD-09 · Edición", "m8h": "Cultura del edit", "m8p": "Edits de personajes, CapCut, tiempos de sonido y de corte. No solo mira: se sienta a charlar con los editores.",
+    "mfl": "MOD-10 · Radar", "mfh": "En su radar", "mfp": "Gente a la que sigue de cerca.",
+    "pr.h": "Protocolos de <em>operación</em>", "pr.p": "Leer antes de contactar con esta persona.",
+    "pr.humor": `<span class="cmd">$ islam --humor</span><br>Lo absurdo de lo cotidiano. Pone algo muy épico junto a un detalle muy normal: Darth Vader haciendo cola en el súper. Sarcasmo ligero y algo de reírse de sí mismo.`,
+    "pr.serious": `<span class="cmd">$ islam --serio</span><br>Una pregunta seria merece una respuesta seria. Si dice <span class="k">«¿por qué?»</span>, pregunta por el mecanismo, no por el resultado. Si dice <span class="k">«¿seguro?»</span>, está poniendo a prueba la respuesta.`,
+    "pr.angry": `<span class="cmd">$ islam --molesto</span><br>No le digas «no exageres». Trae una solución. Se le pasa solo.`,
+    "pr.argue": `<span class="cmd">$ islam --debate</span><br>Defiende su idea hasta el final. Si tienes razón, lo admite.`,
+    "pr.impossible": `<span class="cmd">$ islam --imposible</span><br>Primero pregunta por qué. Si no hay motivo, se sienta y hace el prototipo.`,
+    "pr.cmt": "# Los elogios vacíos, el 10/10 a cada idea y los datos inventados no funcionan en este sistema.",
+    "pr.tape": "LÍNEA ROJA", "pr.h3": "Acceso denegado", "pr.p2": "Se puede bromear con casi todo. Burlarse de los valores, la religión y la identidad de las personas está prohibido en este sistema. Quien cruce esta línea pierde la conexión.",
+    "pr.err": "ERROR 403 · acceso_a_valores: prohibido",
+    "po.h": "Puntos de <em>conexión</em>", "po.p": "De aquí en adelante, mi mundo. Entra por donde quieras.", "po.go": "&gt; conectar",
+    "end.p": "&gt; archivo actualizándose, se sigue escribiendo",
+    "boot": [["> iniciando immotech_os v0.3…"], ["> escaneo biométrico .......... ", "COINCIDE", "ok"], ["> módulo de curiosidad ........ ", "DESBORDADO", "warn"], ["> módulo de sueño ............. ", "NO ENCONTRADO", "warn"], ["> abriendo expediente: İSLAM"]],
+    "typed": ["no consume tecnología, la construye", "el futuro CEO", "el multimillonario de mañana", "pregunta «¿por qué es así?»", "programa a las 3 de la mañana", "fundador de ImmoTech"],
+    "toast.sys": "SISTEMA", "toast.port": "Este puerto aún no está abierto. Pronto.", "toast.idle": "20 segundos sin moverte. En ese tiempo se me ocurrieron dos ideas y tiré una.",
+    "toast.other": "Para otros idiomas, usa la opción Traducir de tu navegador (Chrome: clic derecho → Traducir, Safari: aA → Traducir). La página está preparada.",
+    "st.online": "● EN LÍNEA", "st.wait": "● EN ESPERA", "handle.wait": "esperando conexión", "updated": "Última actualización: {d}",
+    "console": "> ¿mirando el código fuente? muy de mí.",
+  },
+
+  fr: {
+    "title": "L'autobiographie d'İslam", "titleAway": "connexion perdue, reviens", "pct": "{n} %", "holo.out": "Puissance",
+    "bar.brand": "IMMOTECH // DOSSIER DU PERSONNEL", "bar.secure": "Connexion sécurisée", "bar.lang": "Langue", "lang.other": "Autres langues…",
+    "cn.code": "Nom de code", "cn.class": "Classe",
+    "st.curiosity": "Curiosité", "st.curiosityV": "∞ / déborde", "st.ideas": "Idées", "st.ideasV": "3 par minute", "st.sleep": "Sommeil", "st.sleepV": "12 %", "st.bil": "Milliardaire",
+    "nav.aria": "Liens rapides",
+    "holo.title": "Hologramme · noyau d'énergie", "holo.aria": "Réacteur triangulaire holographique en rotation. Fais-le glisser pour le tourner.", "holo.why": "Pourquoi un triangle ? Mark VI.", "holo.drag": "Glisse, fais tourner",
+    "id.h": "Fiche d'<em>identité</em>", "id.photoAria": "Empreinte digitale scannée", "id.tag": "BIOMÉTRIE · CORRESPONDANCE", "id.clear": "NIVEAU D'ACCÈS : FONDATEUR",
+    "id.name": "Nom", "id.user": "Pseudo", "id.status": "Statut", "id.statusV": "Lycéen", "id.statusS": "le lycée le jour, le code la nuit",
+    "id.langs": "Langues", "id.langsV": "Turc · Anglais", "id.langsS": "apprend l'arabe, dialecte jordanien",
+    "id.company": "Entreprise", "id.companyS": "fondateur, pour l'instant seul employé", "id.stack": "Stack technique", "id.aiDev": "développement avec l'IA", "id.gear": "Équipement",
+    "id.ideal": "Identité idéale", "id.idealV": "Ingénieur + développeur IA + entrepreneur + scientifique + biologiste moléculaire + inventeur",
+    "id.quote": "Quand il voit une technologie, la première question est toujours la même : <b>« Comment je ferais ça moi-même ? »</b>",
+    "me.h": "Avec mes propres <em>mots</em>", "me.p": "Jusqu'ici, c'est le dossier qui parlait. Maintenant, c'est mon tour.",
+    "e1h": "Qui suis-je ?", "e1p": "Un lycéen à qui ça ne suffit pas de regarder la technologie. Quand je vois quelque chose de nouveau, je me demande d'abord comment ça marche, puis je m'assois et j'essaie de le faire moi-même. Ça rate presque toujours la première fois. Pas grave, la boucle est là pour ça.",
+    "e2h": "Ma journée", "e2p": "Le lycée le jour, le code la nuit. Les meilleures idées arrivent toujours après minuit, c'est pour ça que le sommeil est en bas de la liste. Quand j'ai la tête pleine : un épisode de série, puis retour à l'écran.",
+    "e3h": "Pourquoi je construis ?", "e3p": "Pour moi, coder n'est pas le but, c'est l'outil. Ce que je veux vraiment, c'est créer des choses qui touchent vraiment la vie des gens : une maison qui veille sur les personnes âgées, un vêtement qui sauve une vie en cas d'urgence. VANTRA est le premier pas sur ce chemin.",
+    "e4h": "En quoi je crois ?", "e4p": "Au respect et à l'honnêteté. Je ris de presque tout, mais les valeurs, la religion et l'identité des gens sont une ligne rouge pour moi. Je défends mes idées jusqu'au bout ; si tu as raison, je l'admets. Je préfère une critique honnête à un compliment creux.",
+    "e5h": "Où je vais ?", "e5p": "D'abord faire grandir VANTRA, puis faire d'ImmoTech une vraie entreprise. Je veux réunir l'ingénierie, l'IA et la biologie moléculaire autour de la même table. Et à chaque fois, faire plus grand que la fois d'avant.",
+    "loop.h": "Boucle de <em>travail</em>", "loop.p": "Chaque idée dans sa tête passe par ce chemin. La boucle tourne en direct, tu peux la regarder.",
+    "s1": "Je l'ai imaginé", "s1s": "souvent la nuit", "s2": "C'est vraiment faisable ?", "s3": "Comment ça marche ?", "s3s": "le « pourquoi ? » commence ici", "s4": "Je peux le faire ?", "s5": "Faisons un prototype",
+    "s6": "Ça n'a pas marché 💀", "s7": "Pourquoi ça n'a pas marché ?", "s8": "Corriger", "s9": "Ça marche", "s10": "En faire un produit", "s11": "Créer une entreprise", "s12": "Faire plus grand", "s12s": "et on recommence",
+    "loop.laps": "Tours :", "loop.note": "Ici, coder n'est pas le but, c'est l'outil.",
+    "proj.h": "Projets &amp; <em>ImmoTech</em>", "proj.p": "Un est en ligne, les autres arrivent. Ça commence par le logiciel et ça s'étend aux technologies portables, à la santé et à la robotique.",
+    "proj.live": "EN LIGNE", "proj.coinAria": "Frapper la médaille",
+    "proj.vantra": "Mon appli à moi. Les gens y créent des médailles, des badges et des reliefs, les partagent dans le fil et se les échangent par chat. Front-end Flutter, back-end Python, tout est de moi.",
+    "proj.open": "Ouvrir VANTRA", "proj.vision": "VISION", "proj.immo": "L'entreprise sur le long terme. Le but : des produits qui changent vraiment la vie des gens.",
+    "proj.rd": "R&amp;D", "proj.concept": "CONCEPT",
+    "proj.suit": "Penser le vêtement comme un ordinateur : GPS, aide d'urgence, capteurs, suivi biométrique, soin des plaies.",
+    "proj.home": "Une maison avec IA pour les personnes âgées : suivi des médicaments, données de santé, capteurs d'ambiance, alertes automatiques.", "proj.car": "Une plateforme d'intervention d'urgence sur roues.",
+    "mem.h": "Banque de <em>mémoire</em>", "mem.p": "Ce qui remplit sa tête. Classé par ordre de chargement, pas d'importance.",
+    "m1l": "MOD-01 · Ingénierie", "m1p": "Ce qui l'intéresse, ce n'est pas le côté super-héros, c'est qu'<b>il résout son problème avec sa propre technologie</b>. Son armure préférée : la Mark VI, pour son réacteur triangulaire. Ce qu'il a pris de Tony : la curiosité, l'ingénierie, créer. Ce qu'il a laissé : l'ego.",
+    "m2l": "MOD-02 · Responsabilité", "m2p": "La relation mentor-apprenti entre Tony et Peter. Tom Holland. Compte à rebours pour Brand New Day et Doomsday.",
+    "m3l": "MOD-03 · Avertissement", "m3p": "Dans Star Wars, surtout Anakin. Le personnage qui rappelle jusqu'où le pouvoir peut mener quelqu'un. Et les sabres laser.", "m3touch": "Touche le sabre",
+    "saber.ignite": "Allumer le sabre laser", "saber.off": "Éteindre le sabre laser",
+    "m4l": "MOD-04 · Chaos scientifique", "m4p": "Ce qui se passe quand la science n'a pas de limites. Pistolet à portails, univers parallèles à l'infini, humour absurde et vraie science dans la même scène. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · Séries enregistrées", "m5h": "Archives de nuit",
+    "m6l": "MOD-06 · Histoire", "m6h": "Jeux vidéo", "m6p": "L'histoire, l'ambiance et la narration cinématographique comptent autant que le gameplay.",
+    "m7l": "MOD-07 · L'inconnu", "m7h": "Espace et physique", "m7p": "Dilatation du temps, quantique, quatrième dimension, TON 618, Interstellar, Artemis II. Et le fonctionnement du cerveau humain.",
+    "mbl": "MOD-08 · Vivant", "mbh": "Biologie", "mbp": "Comment fonctionne le vivant : cellules, ADN, comment le corps se répare. Le côté santé d'Immo-Suit et d'Immo-Home vient de là.",
+    "m8l": "MOD-09 · Montage", "m8h": "Culture de l'edit", "m8p": "Edits de personnages, CapCut, timing du son et des coupes. Il ne se contente pas de regarder : il s'assoit et discute avec les monteurs.",
+    "mfl": "MOD-10 · Radar", "mfh": "Sur son radar", "mfp": "Des gens qu'il suit de près.",
+    "pr.h": "Protocoles de <em>fonctionnement</em>", "pr.p": "À lire avant de contacter cette personne.",
+    "pr.humor": `<span class="cmd">$ islam --humour</span><br>L'absurde du banal. Il met quelque chose de très classe à côté d'un détail très ordinaire : Dark Vador qui fait la queue au supermarché. Sarcasme léger, un peu d'autodérision.`,
+    "pr.serious": `<span class="cmd">$ islam --serieux</span><br>Une question sérieuse mérite une réponse sérieuse. S'il dit <span class="k">« pourquoi ? »</span>, il demande le mécanisme, pas le résultat. S'il dit <span class="k">« t'es sûr ? »</span>, il teste la réponse.`,
+    "pr.angry": `<span class="cmd">$ islam --agace</span><br>Ne lui dis pas « n'exagère pas ». Apporte une solution. Ça passe tout seul.`,
+    "pr.argue": `<span class="cmd">$ islam --debat</span><br>Il défend son avis jusqu'au bout. Si tu as raison, il l'admet.`,
+    "pr.impossible": `<span class="cmd">$ islam --impossible</span><br>Il demande d'abord pourquoi. S'il n'y a pas de raison, il s'assoit et fait le prototype.`,
+    "pr.cmt": "# Les compliments creux, le 10/10 pour chaque idée et les infos inventées ne tournent pas sur ce système.",
+    "pr.tape": "LIGNE ROUGE", "pr.h3": "Accès refusé", "pr.p2": "On peut rire de presque tout. Se moquer des valeurs, de la religion et de l'identité des gens est interdit sur ce système. Qui franchit cette ligne perd la connexion.",
+    "pr.err": "ERREUR 403 · acces_aux_valeurs : interdit",
+    "po.h": "Points de <em>connexion</em>", "po.p": "À partir d'ici, c'est mon monde. Entre par où tu veux.", "po.go": "&gt; se connecter",
+    "end.p": "&gt; dossier en cours de mise à jour, la suite s'écrit",
+    "boot": [["> démarrage d'immotech_os v0.3…"], ["> scan biométrique ............ ", "CORRESPONDANCE", "ok"], ["> module curiosité ............ ", "DÉBORDEMENT", "warn"], ["> module sommeil .............. ", "INTROUVABLE", "warn"], ["> ouverture du dossier : İSLAM"]],
+    "typed": ["ne consomme pas la technologie, il la construit", "le futur PDG", "le milliardaire de demain", "demande « pourquoi c'est comme ça ? »", "code à 3 h du matin", "fondateur d'ImmoTech"],
+    "toast.sys": "SYSTÈME", "toast.port": "Ce port n'est pas encore ouvert. Bientôt.", "toast.idle": "Aucun mouvement depuis 20 secondes. Pendant ce temps, j'ai eu deux idées et j'en ai jeté une.",
+    "toast.other": "Pour d'autres langues, utilise l'option Traduire de ton navigateur (Chrome : clic droit → Traduire, Safari : aA → Traduire). La page est prête pour ça.",
+    "st.online": "● EN LIGNE", "st.wait": "● EN ATTENTE", "handle.wait": "connexion en attente", "updated": "Dernière mise à jour : {d}",
+    "console": "> tu lis le code source ? tellement moi.",
+  },
+
+  ru: {
+    "title": "Автобиография Ислама", "titleAway": "связь потеряна, вернись", "pct": "{n} %", "holo.out": "Мощность", "name": "Ислам",
+    "bar.brand": "IMMOTECH // ЛИЧНОЕ ДЕЛО", "bar.secure": "Соединение защищено", "bar.lang": "Язык", "lang.other": "Другие языки…",
+    "cn.code": "Позывной", "cn.class": "Класс",
+    "st.curiosity": "Любопытство", "st.curiosityV": "∞ / через край", "st.ideas": "Идеи", "st.ideasV": "3 в минуту", "st.sleep": "Сон", "st.sleepV": "12 %", "st.bil": "Миллиардер",
+    "nav.aria": "Быстрые ссылки",
+    "holo.title": "Голограмма · энергоядро", "holo.aria": "Вращающийся голографический треугольный реактор. Потяни, чтобы повернуть.", "holo.why": "Почему треугольник? Mark VI.", "holo.drag": "Тяни и крути",
+    "id.h": "Личная <em>карточка</em>", "id.photoAria": "Отсканированный отпечаток пальца", "id.tag": "БИОМЕТРИЯ · СОВПАДЕНИЕ", "id.clear": "УРОВЕНЬ ДОСТУПА: ОСНОВАТЕЛЬ",
+    "id.name": "Имя", "id.user": "Никнейм", "id.status": "Статус", "id.statusV": "Старшеклассник", "id.statusS": "днём школа, ночью код",
+    "id.langs": "Языки", "id.langsV": "Турецкий · Английский", "id.langsS": "учит арабский, иорданский диалект",
+    "id.company": "Компания", "id.companyS": "основатель, пока единственный сотрудник", "id.stack": "Стек", "id.aiDev": "разработка с ИИ", "id.gear": "Снаряжение",
+    "id.ideal": "Идеальная роль", "id.idealV": "Инженер + ИИ-разработчик + предприниматель + учёный + молекулярный биолог + изобретатель",
+    "id.quote": "Когда он видит новую технологию, первый вопрос всегда один: <b>«А как сделать это самому?»</b>",
+    "me.h": "Своими <em>словами</em>", "me.p": "До сих пор говорило досье. Теперь моя очередь.",
+    "e1h": "Кто я?", "e1p": "Старшеклассник, которому мало просто смотреть на технологии. Когда я вижу что-то новое, сначала спрашиваю, как это работает, а потом сажусь и пробую сделать сам. С первого раза почти никогда не выходит. Ничего страшного, для этого и есть цикл.",
+    "e2h": "Мой день", "e2p": "Днём школа, ночью код. Лучшие идеи всегда приходят после полуночи, поэтому сон в самом конце списка. Когда голова переполнена: одна серия сериала, и снова к экрану.",
+    "e3h": "Зачем я создаю?", "e3p": "Код для меня не цель, а инструмент. По-настоящему я хочу делать вещи, которые реально меняют жизнь людей: дом, который заботится о пожилых, одежду, которая спасает жизнь в экстренной ситуации. VANTRA — первый шаг на этом пути.",
+    "e4h": "Во что я верю?", "e4p": "В уважение и честность. Я шучу почти обо всём, но ценности, религия и идентичность людей для меня красная линия. Я отстаиваю свои идеи до конца; если ты прав, я это признаю. Честная критика мне дороже пустой похвалы.",
+    "e5h": "Куда я иду?", "e5p": "Сначала вырастить VANTRA, потом превратить ImmoTech в настоящую компанию. Хочу свести инженерию, ИИ и молекулярную биологию за одним столом. И каждый раз делать что-то больше, чем в прошлый раз.",
+    "loop.h": "Рабочий <em>цикл</em>", "loop.p": "Каждая идея в его голове проходит этот путь. Цикл работает прямо сейчас, можно посмотреть.",
+    "s1": "Придумал", "s1s": "обычно ночью", "s2": "А это вообще возможно?", "s3": "Как это работает?", "s3s": "здесь начинается «почему?»", "s4": "Смогу ли я это сделать?", "s5": "Делаем прототип",
+    "s6": "Не сработало 💀", "s7": "Почему не сработало?", "s8": "Исправить", "s9": "Работает", "s10": "Сделать продукт", "s11": "Основать компанию", "s12": "Сделать что-то больше", "s12s": "и снова сначала",
+    "loop.laps": "Кругов:", "loop.note": "Код здесь не цель, а инструмент.",
+    "proj.h": "Проекты и <em>ImmoTech</em>", "proj.p": "Один уже работает, остальные в пути. Всё начинается с софта и уходит в носимую электронику, медицину и робототехнику.",
+    "proj.live": "РАБОТАЕТ", "proj.coinAria": "Отчеканить медаль",
+    "proj.vantra": "Моё собственное приложение. Люди создают медали, значки и рельефы, делятся ими в ленте и обмениваются в чате. Фронтенд на Flutter, бэкенд на Python, всё сделал я.",
+    "proj.open": "Открыть VANTRA", "proj.vision": "ВИДЕНИЕ", "proj.immo": "Компания на долгую перспективу. Цель: продукты, которые по-настоящему меняют жизнь людей.",
+    "proj.rd": "НИОКР", "proj.concept": "КОНЦЕПТ",
+    "proj.suit": "Одежда как компьютер: GPS, экстренная помощь, датчики, биометрия, обработка ран.",
+    "proj.home": "Дом с ИИ для пожилых: контроль лекарств, данные о здоровье, датчики среды, автоматические оповещения.", "proj.car": "Мобильная платформа экстренного реагирования на колёсах.",
+    "mem.h": "Банк <em>памяти</em>", "mem.p": "Чем забита его голова. По порядку загрузки, а не по важности.",
+    "m1l": "MOD-01 · Инженерия", "m1p": "Его цепляет не то, что это супергерой, а то, что <b>он решает свою проблему собственной технологией</b>. Любимая броня — Mark VI, из-за треугольного реактора. Что взял у Тони: любопытство, инженерию, созидание. Что не взял: эго.",
+    "m2l": "MOD-02 · Ответственность", "m2p": "Отношения наставника и ученика между Тони и Питером. Том Холланд. Обратный отсчёт до Brand New Day и Doomsday.",
+    "m3l": "MOD-03 · Предупреждение", "m3p": "В «Звёздных войнах» — прежде всего Энакин. Персонаж, который напоминает, куда сила может завести человека. И световые мечи.", "m3touch": "Коснись меча",
+    "saber.ignite": "Включить световой меч", "saber.off": "Выключить световой меч",
+    "m4l": "MOD-04 · Научный хаос", "m4p": "Что будет, если у науки нет границ. Портальная пушка, бесконечные параллельные вселенные, абсурдный юмор и настоящая наука в одной сцене. Wubba lubba dub dub.",
+    "m5l": "MOD-05 · Сохранённые сериалы", "m5h": "Ночной архив",
+    "m6l": "MOD-06 · Сюжет", "m6h": "Игры", "m6p": "Сюжет, атмосфера и кинематографичная подача важны не меньше геймплея.",
+    "m7l": "MOD-07 · Неизвестное", "m7h": "Космос и физика", "m7p": "Замедление времени, квантовая физика, четвёртое измерение, TON 618, «Интерстеллар», Artemis II. И то, как работает человеческий мозг.",
+    "mbl": "MOD-08 · Жизнь", "mbh": "Биология", "mbp": "Как устроено живое: клетки, ДНК, как тело само себя чинит. Медицинская сторона Immo-Suit и Immo-Home растёт отсюда.",
+    "m8l": "MOD-09 · Монтаж", "m8h": "Культура эдитов", "m8p": "Эдиты персонажей, CapCut, тайминг звука и склеек. Он не просто смотрит: садится и болтает с монтажёрами.",
+    "mfl": "MOD-10 · Радар", "mfh": "На его радаре", "mfp": "Люди, за которыми он внимательно следит.",
+    "pr.h": "Рабочие <em>протоколы</em>", "pr.p": "Прочитать перед контактом с этим человеком.",
+    "pr.humor": `<span class="cmd">$ islam --humor</span><br>Абсурдная обыденность. Ставит что-то очень крутое рядом с чем-то очень обычным: Дарт Вейдер стоит в очереди в супермаркете. Лёгкий сарказм и немного самоиронии.`,
+    "pr.serious": `<span class="cmd">$ islam --serious</span><br>На серьёзный вопрос нужен серьёзный ответ. Если он спрашивает <span class="k">«почему?»</span>, ему нужен механизм, а не результат. Если <span class="k">«ты уверен?»</span>, он проверяет ответ.`,
+    "pr.angry": `<span class="cmd">$ islam --annoyed</span><br>Не говори «не преувеличивай». Принеси решение. Само пройдёт.`,
+    "pr.argue": `<span class="cmd">$ islam --debate</span><br>Отстаивает своё мнение до конца. Если ты прав, признает.`,
+    "pr.impossible": `<span class="cmd">$ islam --impossible</span><br>Сначала спрашивает почему. Если причины нет, садится и делает прототип.`,
+    "pr.cmt": "# Пустая похвала, 10/10 каждой идее и выдуманные факты в этой системе не работают.",
+    "pr.tape": "КРАСНАЯ ЛИНИЯ", "pr.h3": "Доступ запрещён", "pr.p2": "Шутить можно почти обо всём. Высмеивать ценности, религию и идентичность людей в этой системе запрещено. Кто переходит эту черту, теряет соединение.",
+    "pr.err": "ОШИБКА 403 · доступ_к_ценностям: запрещён",
+    "po.h": "Точки <em>подключения</em>", "po.p": "Дальше начинается мой мир. Заходи откуда хочешь.", "po.go": "&gt; подключиться",
+    "end.p": "&gt; файл обновляется, продолжение пишется",
+    "boot": [["> запуск immotech_os v0.3…"], ["> биометрия ................... ", "СОВПАДЕНИЕ", "ok"], ["> модуль любопытства .......... ", "ПЕРЕПОЛНЕНИЕ", "warn"], ["> модуль сна .................. ", "НЕ НАЙДЕН", "warn"], ["> открываю личное дело: ИСЛАМ"]],
+    "typed": ["не потребляет технологии, а создаёт их", "будущий CEO", "миллиардер завтрашнего дня", "спрашивает «почему так?»", "пишет код в 3 часа ночи", "основатель ImmoTech"],
+    "toast.sys": "СИСТЕМА", "toast.port": "Этот порт ещё не открыт. Скоро.", "toast.idle": "20 секунд без движения. За это время я придумал две идеи и одну выкинул.",
+    "toast.other": "Для других языков используй функцию «Перевести» в браузере (Chrome: правый клик → Перевести, Safari: aA → Перевести). Страница к этому готова.",
+    "st.online": "● В СЕТИ", "st.wait": "● ОЖИДАНИЕ", "handle.wait": "ожидание подключения", "updated": "Последнее обновление: {d}",
+    "console": "> смотришь исходный код? узнаю себя.",
+  },
+};
+const LOCALES = { tr: "tr-TR", en: "en-GB", ar: "ar-u-nu-latn", de: "de-DE", es: "es-ES", fr: "fr-FR", ru: "ru-RU" };
+</script>
+
+<script>
+document.documentElement.classList.add("js");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ───── dil motoru ───── */
+let L = "tr";
+const onLang = [];
+document.querySelectorAll("[data-i18n]").forEach(el => { const k = el.dataset.i18n; if (!(k in T.tr)) T.tr[k] = el.innerHTML.trim(); });
+document.querySelectorAll("[data-i18n-aria]").forEach(el => { const k = el.dataset.i18nAria; if (!(k in T.tr)) T.tr[k] = el.getAttribute("aria-label"); });
+function t(k, vars) {
+  let v = T[L] && k in T[L] ? T[L][k] : k in T.en ? T.en[k] : T.tr[k];
+  if (v == null) return k;
+  if (vars && typeof v === "string") for (const n in vars) v = v.replace("{" + n + "}", vars[n]);
+  return v;
+}
+const pct = n => t("pct", { n });
+const loc = () => LOCALES[L] || L;
+window.I18N = { t, pct, holoOut: n => t("holo.out") + " " + pct(n) };
+onLang.push(() => { document.getElementById("holo-pct").textContent = window.I18N.holoOut(100); });
+
+const sel = document.getElementById("lang"), nameEl = document.getElementById("name");
+function applyLang(code, save) {
+  L = T[code] ? code : "en";
+  const root = document.documentElement;
+  root.lang = L; root.dir = L === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
+  nameEl.dataset.t = nameEl.textContent;
+  document.title = document.hidden ? t("titleAway") : t("title");
+  sel.value = L;
+  onLang.forEach(f => f());
+  if (save) {
+    try { localStorage.setItem("lang", L); } catch (e) {}
+    try { const u = new URL(location.href); u.searchParams.set("lang", L); history.replaceState(null, "", u); } catch (e) {}
+  }
+}
+function detectLang() {
+  try { const q = new URLSearchParams(location.search).get("lang"); if (q && T[q]) return q; } catch (e) {}
+  try { const s = localStorage.getItem("lang"); if (s && T[s]) return s; } catch (e) {}
+  for (const l of navigator.languages || [navigator.language || ""]) { const c = String(l).slice(0, 2).toLowerCase(); if (T[c]) return c; }
+  return "en";
+}
+sel.addEventListener("change", () => {
+  if (sel.value === "other") { sel.value = L; toast(t("toast.other"), 9000); return; }
+  applyLang(sel.value, true);
+});
+
+/* ───── bildirim ───── */
+const toastEl = document.getElementById("toast"), toastText = document.getElementById("toast-text");
+let toastTimer;
+function toast(msg, ms = 4200) {
+  toastText.textContent = msg; toastEl.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), ms);
+}
+onLang.push(() => { document.getElementById("toast-sys").textContent = t("toast.sys"); });
+
+/* ───── bağlantılar ───── */
+document.querySelectorAll("[data-link]").forEach(a => {
+  const l = LINKS[a.dataset.link];
+  if (l && l.url) { a.href = l.url; a.target = "_blank"; a.rel = "noopener"; }
+  else a.addEventListener("click", e => { e.preventDefault(); toast(t("toast.port")); });
+});
+onLang.push(() => {
+  document.querySelectorAll("[data-handle]").forEach(el => { const l = LINKS[el.dataset.handle]; el.textContent = (l && l.handle) || t("handle.wait"); });
+  document.querySelectorAll("[data-st]").forEach(el => {
+    const up = !!(LINKS[el.dataset.st] && LINKS[el.dataset.st].url);
+    el.textContent = t(up ? "st.online" : "st.wait"); el.className = "st " + (up ? "up" : "wait");
+  });
+});
+
+/* ───── saat + tarih ───── */
+(() => {
+  const c = document.getElementById("clock");
+  const tick = () => { c.textContent = new Date().toLocaleTimeString(loc(), { hour12: false }); };
+  setInterval(tick, 1000);
+  onLang.push(tick);
+  onLang.push(() => {
+    const d = new Date().toLocaleDateString(loc(), { day: "numeric", month: "long", year: "numeric" });
+    document.getElementById("now").textContent = t("updated", { d });
+  });
+})();
+
+/* ───── açılış kaydı ───── */
+const boot = (() => {
+  const el = document.getElementById("boot");
+  let run = 0;
+  const line = l => l[0] + (l[1] ? `<span class="${l[2]}">${l[1]}</span>` : "");
+  const render = () => { run++; el.innerHTML = t("boot").map(line).join("\n"); };
+  function animate() {
+    if (reduce) return render();
+    const my = ++run, lines = t("boot");
+    let li = 0, ci = 0, html = "";
+    (function step() {
+      if (my !== run || li >= lines.length) return;
+      const [txt, tail, cls] = lines[li];
+      if (ci < txt.length) { ci += 2; el.innerHTML = html + txt.slice(0, ci); return setTimeout(step, 12); }
+      html += line([txt, tail, cls]) + "\n";
+      el.innerHTML = html; li++; ci = 0; setTimeout(step, 140);
+    })();
+  }
+  return { render, animate };
+})();
+
+/* ───── isim arada bozulur ───── */
+(() => {
+  if (reduce) return;
+  const go = () => { nameEl.classList.remove("glitch"); void nameEl.offsetWidth; nameEl.classList.add("glitch"); setTimeout(go, 2500 + Math.random() * 3500); };
+  setTimeout(go, 1400);
+})();
+
+/* ───── kendini yazan rol satırı ───── */
+const typed = (() => {
+  const el = document.getElementById("typed");
+  let gen = 0;
+  function start(delay) {
+    const my = ++gen;
+    const first = [...t("typed")[0]];
+    el.textContent = first.join("");
+    if (reduce) return;
+    let i = 0, n = first.length, dir = -1;
+    function step() {
+      if (my !== gen) return;
+      const lines = t("typed"), cur = [...lines[i]];
+      if (dir < 0) {
+        n--; el.textContent = cur.slice(0, Math.max(0, n)).join("");
+        if (n <= 0) { dir = 1; i = (i + 1) % lines.length; return setTimeout(step, 260); }
+        return setTimeout(step, 22);
+      }
+      n++; el.textContent = cur.slice(0, n).join("");
+      if (n >= cur.length) { dir = -1; return setTimeout(step, 2400); }
+      setTimeout(step, 45 + Math.random() * 60);
+    }
+    setTimeout(step, delay);
+  }
+  return { start };
+})();
+
+/* ───── milyarderlik sayacı ───── */
+(() => {
+  const el = document.getElementById("bil"); let v = 0.0004;
+  const show = () => { el.textContent = pct(v.toLocaleString(loc(), { minimumFractionDigits: 6, maximumFractionDigits: 6 })); };
+  setInterval(() => { v += 0.000001; show(); }, 1000);
+  onLang.push(show);
+})();
+
+/* ───── çalışma döngüsü ───── */
+(() => {
+  const steps = [...document.querySelectorAll("#loop .step")], laps = document.getElementById("laps");
+  let i = -1, lap = 0, timer;
+  function next() {
+    steps.forEach(s => s.classList.remove("on"));
+    i = (i + 1) % steps.length;
+    if (i === 0 && timer) { lap++; laps.textContent = lap; }
+    steps[i].classList.add("on");
+    timer = setTimeout(next, steps[i].classList.contains("fail") ? 1600 : 900);
+  }
+  if (reduce) { steps[0].classList.add("on"); return; }
+  const io = new IntersectionObserver(es => {
+    if (es[0].isIntersecting && !timer) next();
+    else if (!es[0].isIntersecting && timer) { clearTimeout(timer); timer = 0; }
+  });
+  io.observe(document.getElementById("loop"));
+})();
+
+/* ───── biyometrik tarama: parmak izi ───── */
+(() => {
+  const c = document.getElementById("face"), g = c.getContext("2d");
+  let W, H, d;
+  function size() { const r = c.getBoundingClientRect(); d = devicePixelRatio || 1; W = r.width; H = r.height; c.width = W * d; c.height = H * d; }
+  size(); addEventListener("resize", size);
+  let t = 0;
+  function frame() {
+    t += .012;
+    g.setTransform(d, 0, 0, d, 0, 0); g.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H * .52, s = Math.min(W, H) / 240;
+    const scanY = (Math.sin(t) * .5 + .5) * H;
+    for (let k = 0; k < 22; k++) {
+      const rx = (10 + k * 4.4) * s, ry = (13 + k * 5.6) * s;
+      g.beginPath();
+      for (let a = -Math.PI * 1.08; a <= Math.PI * .08; a += .04) {
+        const wob = Math.sin(a * 6 + k * .9) * 1.4 * s;
+        const x = cx + Math.cos(a) * (rx + wob), y = cy + Math.sin(a) * (ry + wob);
+        a === -Math.PI * 1.08 ? g.moveTo(x, y) : g.lineTo(x, y);
+      }
+      for (let a = .08; a <= Math.PI * .95; a += .05) {
+        if ((k + Math.floor(a * 3)) % 7 === 0) break;
+        g.lineTo(cx + Math.cos(a) * rx * .96, cy + Math.sin(a) * ry * .7);
+      }
+      const near = Math.max(0, 1 - Math.abs(cy - ry * .2 - scanY) / (H * .5));
+      g.strokeStyle = `rgba(60,232,255,${.25 + near * .55})`; g.lineWidth = 1.6 * s; g.stroke();
+    }
+    g.fillStyle = "rgba(60,232,255,.9)"; g.fillRect(0, scanY, W, 1.5);
+    const gr = g.createLinearGradient(0, scanY - 30, 0, scanY);
+    gr.addColorStop(0, "rgba(60,232,255,0)"); gr.addColorStop(1, "rgba(60,232,255,.18)");
+    g.fillStyle = gr; g.fillRect(0, scanY - 30, W, 30);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ───── madalya basımı ───── */
+(() => {
+  const c = document.getElementById("coin");
+  c.addEventListener("click", () => { c.classList.remove("stamp"); void c.offsetWidth; c.classList.add("stamp"); });
+  c.addEventListener("animationend", e => { if (e.animationName === "stamp") c.classList.remove("stamp"); });
+})();
+
+/* ───── ışın kılıcı ───── */
+(() => {
+  const b = document.getElementById("saber");
+  const label = () => b.setAttribute("aria-label", t(b.classList.contains("on") ? "saber.off" : "saber.ignite"));
+  b.addEventListener("click", () => {
+    const on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); label();
+  });
+  onLang.push(label);
+})();
+
+/* ───── kayarak giriş + göstergeler ───── */
+(() => {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in", "on"); io.unobserve(e.target); } }), { threshold: .2 });
+  document.querySelectorAll(".slide, #stats").forEach(el => io.observe(el));
+})();
+
+/* ───── garip ayrıntılar ───── */
+(() => {
+  document.addEventListener("visibilitychange", () => { document.title = document.hidden ? t("titleAway") : t("title"); });
+  let idle, shown = false;
+  const arm = () => {
+    if (shown) return; clearTimeout(idle);
+    idle = setTimeout(() => { shown = true; toast(t("toast.idle"), 6000); }, 20000);
+  };
+  ["pointermove", "keydown", "scroll", "touchstart"].forEach(ev => addEventListener(ev, arm, { passive: true }));
+  arm();
+})();
+
+/* ───── başlat ───── */
+applyLang(detectLang(), false);
+boot.animate();
+typed.start(2800);
+onLang.push(() => { boot.render(); typed.start(1600); });
+console.log("%c" + t("console"), "font: 600 13px monospace; color: #3ce8ff");
+</script>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+
+const stage = document.getElementById("holo");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let renderer = null;
+try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) {}
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  stage.prepend(renderer.domElement);
+  document.getElementById("holo-fallback").hidden = true;
+
+  const CY = 0x3ce8ff;
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(32, 1, .1, 50); cam.position.set(0, 0, 7);
+  const add = (m) => { m.blending = THREE.AdditiveBlending; m.transparent = true; m.depthWrite = false; return m; };
+  const glowTex = (() => {
+    const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d");
+    const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(.2, "rgba(140,240,255,.8)"); gr.addColorStop(.5, "rgba(60,232,255,.2)"); gr.addColorStop(1, "rgba(60,232,255,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+  })();
+
+  const core = new THREE.Group(); scene.add(core);
+
+  // dış halka ve bobinler
+  core.add(new THREE.Mesh(new THREE.TorusGeometry(1.5, .05, 16, 160), add(new THREE.MeshBasicMaterial({ color: CY, opacity: .95 }))));
+  core.add(new THREE.Mesh(new THREE.TorusGeometry(1.32, .015, 8, 160), add(new THREE.MeshBasicMaterial({ color: CY, opacity: .6 }))));
+  const coilMat = add(new THREE.MeshBasicMaterial({ color: CY, opacity: .35 }));
+  const coilEdge = add(new THREE.LineBasicMaterial({ color: CY, opacity: .9 }));
+  for (let i = 0; i < 10; i++) {
+    const a = i / 10 * Math.PI * 2;
+    const box = new THREE.BoxGeometry(.32, .14, .2);
+    const m = new THREE.Mesh(box, coilMat), e = new THREE.LineSegments(new THREE.EdgesGeometry(box), coilEdge);
+    for (const o of [m, e]) { o.position.set(Math.cos(a) * 1.41, Math.sin(a) * 1.41, 0); o.rotation.z = a + Math.PI / 2; core.add(o); }
+  }
+
+  // üçgen
+  const tri = new THREE.Shape();
+  const R = 1.02;
+  for (let i = 0; i < 3; i++) { const a = Math.PI / 2 + i * Math.PI * 2 / 3; i ? tri.lineTo(Math.cos(a) * R, Math.sin(a) * R) : tri.moveTo(Math.cos(a) * R, Math.sin(a) * R); }
+  tri.closePath();
+  const hole = new THREE.Path();
+  for (let i = 0; i < 3; i++) { const a = Math.PI / 2 + i * Math.PI * 2 / 3; i ? hole.lineTo(Math.cos(a) * R * .62, Math.sin(a) * R * .62) : hole.moveTo(Math.cos(a) * R * .62, Math.sin(a) * R * .62); }
+  hole.closePath(); tri.holes.push(hole);
+  const triGeo = new THREE.ExtrudeGeometry(tri, { depth: .16, bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 2 });
+  triGeo.translate(0, 0, -.08);
+  const triGroup = new THREE.Group();
+  triGroup.add(new THREE.Mesh(triGeo, add(new THREE.MeshBasicMaterial({ color: CY, opacity: .28 }))));
+  triGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(triGeo, 20), add(new THREE.LineBasicMaterial({ color: 0xbff8ff, opacity: 1 }))));
+  core.add(triGroup);
+
+  // çekirdek ışığı
+  const glow = new THREE.Sprite(add(new THREE.SpriteMaterial({ map: glowTex, color: 0xffffff })));
+  glow.scale.set(2.4, 2.4, 1); core.add(glow);
+  const halo = new THREE.Sprite(add(new THREE.SpriteMaterial({ map: glowTex, color: CY, opacity: .55 })));
+  halo.scale.set(5.2, 5.2, 1); halo.position.z = -.3; core.add(halo);
+
+  // dönen yaylar
+  const arcs = [];
+  for (let i = 0; i < 3; i++) {
+    const m = new THREE.Mesh(new THREE.TorusGeometry(1.85 + i * .18, .012, 6, 120, Math.PI * (.5 + i * .25)), add(new THREE.MeshBasicMaterial({ color: CY, opacity: .55 - i * .12 })));
+    m.rotation.z = i * 2; scene.add(m); arcs.push(m);
+  }
+  // tel kafes küre
+  const wire = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(2.45, 1)), add(new THREE.LineBasicMaterial({ color: CY, opacity: .1 })));
+  scene.add(wire);
+  // parçacıklar
+  const N = 500, pos = new Float32Array(N * 3), spd = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const r = 1.6 + Math.random() * 1.6, a = Math.random() * Math.PI * 2, z = (Math.random() - .5) * 2;
+    pos[i * 3] = Math.cos(a) * r; pos[i * 3 + 1] = Math.sin(a) * r; pos[i * 3 + 2] = z; spd[i] = .002 + Math.random() * .006;
+  }
+  const pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const pts = new THREE.Points(pg, add(new THREE.PointsMaterial({ color: CY, size: .03, opacity: .8 })));
+  scene.add(pts);
+
+  function resize() {
+    const r = stage.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    cam.aspect = r.width / Math.max(1, r.height);
+    cam.position.z = cam.aspect < .9 ? 8.6 : 7; cam.updateProjectionMatrix();
+  }
+  resize(); addEventListener("resize", resize);
+
+  // sürükleyerek çevirme
+  let rx = 0, ry = 0, vx = 0, vy = 0, drag = false, lx = 0, ly = 0;
+  stage.addEventListener("pointerdown", e => { drag = true; lx = e.clientX; ly = e.clientY; stage.setPointerCapture(e.pointerId); stage.style.cursor = "grabbing"; });
+  stage.addEventListener("pointermove", e => { if (!drag) return; vy = (e.clientX - lx) * .006; vx = (e.clientY - ly) * .006; lx = e.clientX; ly = e.clientY; });
+  const up = () => { drag = false; stage.style.cursor = ""; };
+  stage.addEventListener("pointerup", up); stage.addEventListener("pointercancel", up);
+
+  let visible = true, t = 0;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(stage);
+  const pctEl = document.getElementById("holo-pct");
+  const out = n => { pctEl.textContent = window.I18N ? window.I18N.holoOut(n) : "Çıkış %" + n; };
+  out(100);
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!visible) return;
+    t += .016;
+    ry += vy; rx += vx; vx *= .94; vy *= .94;
+    if (!drag && !reduce) { ry += (Math.sin(t * .4) * .6 - ry) * .02; rx += (Math.sin(t * .5) * .25 - rx) * .02; }
+    core.rotation.set(rx, ry, 0);
+    wire.rotation.set(rx * .5, ry * .6 + t * .05, 0);
+    triGroup.rotation.z = reduce ? 0 : Math.sin(t * .7) * .05;
+    arcs.forEach((a, i) => { a.rotation.z += (i % 2 ? -1 : 1) * (.006 + i * .004); a.rotation.x = rx; a.rotation.y = ry; });
+    const p = .85 + Math.sin(t * 3) * .08 + (Math.random() < .02 ? -.25 : 0);
+    glow.material.opacity = p; halo.material.opacity = .45 * p;
+    if (Math.random() < .05) out(Math.round(96 + p * 4));
+    const a = pg.attributes.position;
+    for (let i = 0; i < N; i++) { a.array[i * 3 + 2] += spd[i]; if (a.array[i * 3 + 2] > 1.2) a.array[i * 3 + 2] = -1.2; }
+    a.needsUpdate = true;
+    pts.rotation.z = t * .03;
+    renderer.render(scene, cam);
+  }
+  frame();
+} else {
+  const pctEl = document.getElementById("holo-pct");
+  if (window.I18N) pctEl.textContent = window.I18N.holoOut(100);
+}
+</script>
+</body>
+</html>
